@@ -424,8 +424,8 @@ body[data-photo] .sqr .rk,body[data-photo] .sqr .fl{color:#fff;opacity:.9}
   <p class="section-title">Tablero</p><div class="opts" id="st-boards"></div>
   <p class="section-title">Fondo</p><div class="opts" id="st-bgs"></div>
   <p class="credit" id="st-credit" hidden></p>
-  <p class="section-title">Frases del Catecismo</p>
-  <p class="hint-text">Mientras juegas aparecen frases cortas del Catecismo de la Iglesia Católica.</p>
+  <p class="section-title">Frases del Catecismo y de los santos</p>
+  <p class="hint-text">Mientras juegas aparece una frase nueva cada 40 segundos y una voz la lee. Toca la frase para escuchar otra.</p>
   <div class="cat-opts" id="st-cat"></div>
 </section>
 
@@ -438,7 +438,7 @@ body[data-photo] .sqr .rk,body[data-photo] .sqr .fl{color:#fff;opacity:.9}
   <div class="stage" id="stage"><div class="clouds" aria-hidden="true"><i></i><i></i><i></i></div><div class="glbox"><div class="gl" id="gl"></div><button class="gl-reset" id="gl-reset" aria-label="Centrar el tablero"><svg viewBox="0 0 24 24" fill="none" stroke="#3B2A55" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12 a8 8 0 1 1 -2.3 -5.7"/><path d="M19 3 V7.5 H14.5"/></svg></button><div class="gl-tip" id="gl-tip">Desliza para girar el tablero · usa dos dedos para acercar</div></div><div class="boardwrap"><div class="board" id="board"></div></div></div>
   <div class="tray" id="tray-bot"></div>
   <div class="status" id="g-status"></div>
-  <button class="cat" id="g-cat" hidden aria-label="Frase del Catecismo. Toca para ver otra"></button>
+  <button class="cat" id="g-cat" hidden aria-label="Frase del Catecismo o de un santo. Toca para escuchar otra"></button>
   <div class="actions" id="g-actions">
     <button class="act" id="a-hint"></button>
     <button class="act" id="a-undo"></button>
@@ -1479,15 +1479,17 @@ const MUSIC = (() => {
     let pk = 0, sum = 0; for (let k = 0; k < d.length; k++) { const v = Math.abs(d[k]); if (v > pk) pk = v; sum += v * v; }
     return { name: S.name, seconds: +(b.len * sp).toFixed(1), peak: +pk.toFixed(3), rms: +Math.sqrt(sum / d.length).toFixed(4) };
   }
+  let duckF = 1;
+  function duck(on) { duckF = on ? 0.3 : 1; setVolume(vol); }
   function setVolume(v) {
     vol = Math.max(0, Math.min(1, v)); P.vol = vol;
     try {
-      const gg = vol * 0.92 * (PLAY[idx].g || 1);
+      const gg = vol * duckF * 0.92 * (PLAY[idx].g || 1);
       if (recGain) recGain.gain.setTargetAtTime(gg, AC.currentTime, 0.05); else if (el) el.volume = Math.min(1, gg);
-      if (chain) chain.master.gain.setTargetAtTime(vol, AC.currentTime, 0.05);
+      if (chain) chain.master.gain.setTargetAtTime(vol * duckF, AC.currentTime, 0.05);
     } catch (e) {}
   }
-  return { SONGS, PLAY, start, stop, next, renderStats, setVolume, get volume() { return vol; }, get playing() { return playing; }, get name() { return PLAY[idx].name; }, get by() { return PLAY[idx].by; }, get isRec() { return !!PLAY[idx].rec; }, get el() { return el; }, set onChange(f) { onChange = f; } };
+  return { SONGS, PLAY, start, stop, next, renderStats, setVolume, duck, get volume() { return vol; }, get playing() { return playing; }, get name() { return PLAY[idx].name; }, get by() { return PLAY[idx].by; }, get isRec() { return !!PLAY[idx].rec; }, get el() { return el; }, set onChange(f) { onChange = f; } };
 })();
 
 /* ---------- navigation ---------- */
@@ -1496,6 +1498,7 @@ function show(id) {
   screens.forEach(s => { $('s-' + s).hidden = s !== id; });
   if ($('music-pop')) $('music-pop').hidden = true;
   if (typeof GL !== 'undefined') GL.setActive(id === 'game' && !!P.view3d && GL.ok);
+  if (id !== 'game' && typeof stopCat === 'function') stopCat();
   window.scrollTo(0, 0);
   if (id === 'home') renderHome();
   if (id === 'learn') renderLearn();
@@ -1600,7 +1603,7 @@ const board = $('board');
 const FILES = 'abcdefgh';
 
 
-// Frases del Catecismo de la Iglesia Católica, adaptadas para niños (n. = número del Catecismo)
+// Frases del Catecismo de la Iglesia Católica, adaptadas para niños (número del Catecismo)
 const CAT = [
   [1, 'Dios nos creó por amor, para que vivamos felices con Él.'],
   [27, 'Dios puso en nuestro corazón el deseo de conocerlo. Solo en Él encontramos la verdadera felicidad.'],
@@ -1642,23 +1645,91 @@ const CAT = [
   [2697, 'La oración es la vida del corazón nuevo. Podemos rezar en todo momento.'],
   [2761, 'El Padrenuestro es el resumen de todo el Evangelio.'],
 ];
+// Frases cortas de los santos
+const SAINTS = [
+  ['San Agustín', 'Nos hiciste, Señor, para ti, y nuestro corazón está inquieto hasta que descanse en ti.'],
+  ['San Agustín', 'Quien canta, reza dos veces.'],
+  ['Santa Teresa de Jesús', 'Nada te turbe, nada te espante. Quien a Dios tiene nada le falta: solo Dios basta.'],
+  ['Santa Teresa de Jesús', 'Entre los pucheros anda el Señor.'],
+  ['Santa Teresita del Niño Jesús', 'Mi vocación es el amor.'],
+  ['Santa Teresita del Niño Jesús', 'La oración es un impulso del corazón, una sencilla mirada lanzada hacia el cielo.'],
+  ['San Juan Bosco', 'Basta que sean jóvenes para que yo los ame con toda mi alma.'],
+  ['San Juan Bosco', 'Sean buenos cristianos y honrados ciudadanos.'],
+  ['Santo Domingo Savio', 'Nosotros hacemos consistir la santidad en estar siempre alegres.'],
+  ['San Felipe Neri', 'Sean buenos, si pueden.'],
+  ['San Francisco de Asís', '¡Paz y bien!'],
+  ['San Francisco de Sales', 'Nada es tan fuerte como la dulzura, ni nada tan dulce como la verdadera fuerza.'],
+  ['San Ignacio de Loyola', 'En todo amar y servir.'],
+  ['San Juan de la Cruz', 'Al atardecer de la vida nos examinarán en el amor.'],
+  ['Santa Catalina de Siena', 'Si son lo que deben ser, prenderán fuego al mundo entero.'],
+  ['San Ireneo', 'La gloria de Dios es que el hombre viva.'],
+  ['San Pío de Pietrelcina', 'Reza, espera y no te preocupes.'],
+  ['Santa Teresa de Calcuta', 'No todos podemos hacer grandes cosas, pero sí cosas pequeñas con gran amor.'],
+  ['San Juan Pablo II', '¡No tengan miedo! ¡Abran de par en par las puertas a Cristo!'],
+  ['San Carlo Acutis', 'La Eucaristía es mi autopista al cielo.'],
+  ['San Carlo Acutis', 'Todos nacemos originales, pero muchos mueren como fotocopias.'],
+  ['La Virgen de Guadalupe a San Juan Diego', '¿No estoy yo aquí, que soy tu madre?'],
+];
+// se alternan: una del Catecismo, una de un santo
+const FRASES = [];
+for (let i = 0; i < CAT.length; i++) {
+  FRASES.push({ src: 'Del Catecismo · n. ' + CAT[i][0], t: CAT[i][1], say: CAT[i][1] });
+  const S = SAINTS[(i * 7) % SAINTS.length];
+  FRASES.push({ src: S[0], t: '«' + S[1] + '»', say: (S[0].startsWith('La Virgen') ? 'La Virgen de Guadalupe le dijo a San Juan Diego: ' : 'Dice ' + S[0] + ': ') + S[1] });
+}
 const DOVE = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 22 C10 14 18 12 23 15 L30 9 C33 8 35 10 34 13 L30 17 C31 25 24 31 15 30 L9 33 L11 28 C8 27 6 25 6 22Z" fill="#fff" stroke="#3B2A55" stroke-width="1.8" stroke-linejoin="round"/><path d="M13 21 C16 17 21 17 24 20" fill="none" stroke="#3B2A55" stroke-width="1.6" stroke-linecap="round"/><circle cx="30.5" cy="12" r="1.3" fill="#3B2A55"/><path d="M34 12.5 L37.5 13 L34.3 14.8" fill="#F2B84B" stroke="#3B2A55" stroke-width="1.2" stroke-linejoin="round"/></svg>';
-if (typeof P.catI !== 'number') P.catI = Math.floor(Math.random() * CAT.length);
+const CAT_EVERY = 40000; // cambia sola cada 40 segundos
+if (typeof P.catI !== 'number' || P.catI >= FRASES.length) P.catI = Math.floor(Math.random() * FRASES.length);
+const VOICE = (() => {
+  const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+  let pick = null;
+  const choose = () => {
+    if (!ok) return;
+    const vs = speechSynthesis.getVoices().filter(v => /^es/i.test(v.lang));
+    const rank = v => (/es[-_]MX/i.test(v.lang) ? 0 : /es[-_](US|419)/i.test(v.lang) ? 1 : 2) + (/paulina|sabina|dalia|google|natural|premium|enhanced/i.test(v.name) ? -0.5 : 0);
+    pick = vs.sort((a, b) => rank(a) - rank(b))[0] || null;
+  };
+  if (ok) { choose(); speechSynthesis.onvoiceschanged = choose; }
+  function stop() { if (!ok) return; try { speechSynthesis.cancel(); } catch (e) {} MUSIC.duck(false); }
+  function say(text) {
+    if (!ok) return;
+    stop();
+    const u = new SpeechSynthesisUtterance(text);
+    if (pick) u.voice = pick;
+    u.lang = pick ? pick.lang : 'es-MX'; u.rate = 0.92; u.pitch = 1.1;
+    u.onstart = () => MUSIC.duck(true);
+    u.onend = u.onerror = () => MUSIC.duck(false);
+    try { speechSynthesis.speak(u); } catch (e) {}
+  }
+  return { ok, say, stop };
+})();
+let catTimer = 0;
+function stopCat() { clearTimeout(catTimer); VOICE.stop(); }
+function armCat() { clearTimeout(catTimer); catTimer = setTimeout(() => { if (!$('s-game').hidden && $('veil').hidden && !document.hidden) showCat(); else armCat(); }, CAT_EVERY); }
 function showCat() {
   const el = $('g-cat');
-  if (P.cat === false) { el.hidden = true; return; }
-  const [n, t] = CAT[P.catI % CAT.length];
-  P.catI = (P.catI + 1) % CAT.length; save();
-  el.innerHTML = `<span class="ci">${DOVE}</span><span><small>Del Catecismo · n. ${n}</small><span class="ct">${t}</span></span>`;
+  if (P.cat === false) { el.hidden = true; stopCat(); return; }
+  const f = FRASES[P.catI % FRASES.length];
+  P.catI = (P.catI + 1) % FRASES.length; save();
+  el.innerHTML = `<span class="ci">${DOVE}</span><span><small>${f.src}</small><span class="ct">${f.t}</span></span>`;
   el.hidden = false;
   el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  if (P.catVoice !== false) VOICE.say(f.say);
+  armCat();
 }
 $('g-cat').onclick = () => { sfx.tap(); showCat(); };
+document.addEventListener('visibilitychange', () => { if (document.hidden) VOICE.stop(); });
 function renderCatOpt() {
-  const on = P.cat !== false;
-  $('st-cat').innerHTML = `<button class="btn ${on ? '' : 'alt'}" data-cat="1" aria-pressed="${on}">Mostrar frases</button><button class="btn ${on ? 'alt' : ''}" data-cat="0" aria-pressed="${!on}">Ocultar frases</button>`;
+  const on = P.cat !== false, v = P.catVoice !== false;
+  $('st-cat').innerHTML = `<button class="btn ${on ? '' : 'alt'}" data-cat="1" aria-pressed="${on}">Mostrar frases</button><button class="btn ${on ? 'alt' : ''}" data-cat="0" aria-pressed="${!on}">Ocultar frases</button>`
+    + (VOICE.ok ? `<button class="btn ${v ? '' : 'alt'}" data-voz="1" aria-pressed="${v}">Leer en voz alta</button><button class="btn ${v ? 'alt' : ''}" data-voz="0" aria-pressed="${!v}">Sin voz</button>` : '');
 }
-$('st-cat').onclick = e => { const b = e.target.closest('[data-cat]'); if (!b) return; sfx.tap(); P.cat = b.dataset.cat === '1'; save(); renderCatOpt(); };
+$('st-cat').onclick = e => {
+  const b = e.target.closest('[data-cat],[data-voz]'); if (!b) return; sfx.tap();
+  if (b.dataset.cat) P.cat = b.dataset.cat === '1';
+  else { P.catVoice = b.dataset.voz === '1'; if (P.catVoice) VOICE.say('¡Hola! Yo leeré las frases mientras juegas.'); else VOICE.stop(); }
+  save(); renderCatOpt();
+};
 function baseGame(mode, s, title) {
   G = { mode, s, hist: [], sel: -1, moves: [], last: null, pop: -1, hint: null, hints: 0, undos: 0, over: false, busy: false };
   $('g-title').textContent = title;
@@ -1670,7 +1741,7 @@ function baseGame(mode, s, title) {
   $('a-undo').disabled = mode === 'puzzle';
   renderSound();
   show('game');
-  G.plies = 0; showCat();
+  showCat();
 }
 function bubble(html, avKind) {
   if (avKind) $('g-av').innerHTML = avKind;
@@ -2838,8 +2909,6 @@ function applyMove(m) {
   G.hist.push({ s: G.s, last: G.last, targets: G.targets ? new Set(G.targets) : null, count: G.count });
   G.s = E.make(G.s, m);
   G.last = m; G.sel = -1; G.moves = []; G.pop = m.to; G.hint = null;
-  G.plies = (G.plies || 0) + 1;
-  if ((G.mode === 'ai' || G.mode === 'duo') && G.plies % 6 === 0) setTimeout(showCat, 700);
 }
 
 function playerMove(m) {

@@ -12,7 +12,7 @@ Ajedrez tierno para niños. Aprenden a mover cada pieza, resuelven retos de jaqu
 - **Mi estilo:** 6 parejas de colores, 15 diseños de piezas (Mimitos, Selva, Cristal, Jardín, Fuego y agua, Carritos, Espacio, Caricatura, Ébano y marfil, Elegantes, Gatitos, Dulces, Robots, Clásicas), 19 tableros (4 con fotos del espacio) y 15 fondos (incluye un fondo espacial generado y 4 fotos reales del espacio).
 - **Vista 2D y 3D** con tablero que se puede girar y acercar.
 - **Música clásica** con control de volumen.
-- **Frases del Catecismo:** mientras juegan aparecen frases cortas del Catecismo de la Iglesia Católica, adaptadas para niños y con su número (cambian cada 3 jugadas de cada lado o al tocarlas; se pueden ocultar en Mi estilo).
+- **Frases del Catecismo y de los santos:** mientras juegan aparece una frase nueva cada 40 segundos y la voz del navegador la lee en voz alta (la música baja mientras habla). Se alternan frases del Catecismo de la Iglesia Católica, adaptadas para niños y con su número, y frases cortas de santos. Tocar la frase muestra otra; en Mi estilo se pueden ocultar o quitar la voz.
 
 El progreso se guarda en el navegador de cada aparato.
 

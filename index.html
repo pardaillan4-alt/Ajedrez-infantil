@@ -1604,7 +1604,7 @@ const GL = (() => {
   sun.position.set(-4, 11, 7);
   sun.castShadow = true;
   sun.shadow.mapSize.set(1024, 1024);
-  Object.assign(sun.shadow.camera, { left: -7, right: 7, top: 7, bottom: -7, near: 1, far: 30 });
+  Object.assign(sun.shadow.camera, { left: -7 * 1.32, right: 7 * 1.32, top: 7 * 1.32, bottom: -7 * 1.32, near: 1, far: 34 });
   sun.shadow.bias = -0.0006;
   scene.add(sun);
   const fill = new T.DirectionalLight(0xffe9f3, 0.18);
@@ -1631,7 +1631,8 @@ const GL = (() => {
   scene.add(boardG, pieceG, markG);
 
   const col = h => new T.Color(h).convertSRGBToLinear();
-  const pos = i => new T.Vector3((i & 7) - 3.5, 0.12, (i >> 3) - 3.5);
+  const SQ = 1.32; // tamaño de casilla en 3D (las piezas no cambian)
+  const pos = i => new T.Vector3(((i & 7) - 3.5) * SQ, 0.12, ((i >> 3) - 3.5) * SQ);
   const GEO = {}, MAT = {};
   const geo = (k, f) => GEO[k] || (GEO[k] = f());
   const mat = (hex, rough = 0.55, extra = {}) => {
@@ -2059,31 +2060,31 @@ const GL = (() => {
     const cs = getComputedStyle(document.body);
     const v = n => (cs.getPropertyValue(n) || '').trim() || '#ffffff';
     const light = v('--sq-light'), dark = v('--sq-dark'), frame = v('--frame'), e1 = v('--edge1'), e2 = v('--edge2');
-    const top = new T.Mesh(geo('slabTop', () => roundSlab(9.0, 9.0, 0.45, 0.3)), LOOK.board === 'cristal' ? crys('#DDF2FF', 0.6) : mat(frame, 0.6));
+    const top = new T.Mesh(geo('slabTop', () => roundSlab(9.0 * SQ, 9.0 * SQ, 0.55, 0.3)), LOOK.board === 'cristal' ? crys('#DDF2FF', 0.6) : mat(frame, 0.6));
     top.position.y = -0.3; top.receiveShadow = true; boardG.add(top);
-    const low = new T.Mesh(geo('slabLow', () => roundSlab(9.3, 9.3, 0.55, 0.45)), mat(e2, 0.6));
+    const low = new T.Mesh(geo('slabLow', () => roundSlab(9.3 * SQ, 9.3 * SQ, 0.65, 0.45)), mat(e2, 0.6));
     low.position.y = -0.85; low.receiveShadow = true; boardG.add(low);
-    const mid = new T.Mesh(geo('slabMid', () => roundSlab(9.15, 9.15, 0.5, 0.12)), mat(e1, 0.6));
+    const mid = new T.Mesh(geo('slabMid', () => roundSlab(9.15 * SQ, 9.15 * SQ, 0.6, 0.12)), mat(e1, 0.6));
     mid.position.y = -0.42; boardG.add(mid);
     tiles = [];
-    const tg = box(1, 0.12, 1);
+    const tg = box(SQ, 0.12, SQ);
     for (let i = 0; i < 64; i++) {
       const r = i >> 3, c = i & 7, lt = (r + c) % 2 === 0;
       let h = lt ? light : dark;
       if (!lt && LOOK.board === 'arcoiris') h = RAINBOW[r];
       const glassB = LOOK.board === 'cristal';
       const m = new T.Mesh(tg, glassB ? crys(h === light ? '#EAF7FF' : '#9FD3F0', lt ? 0.55 : 0.7) : mat(h, 0.75));
-      m.position.set(c - 3.5, 0.06, r - 3.5);
+      m.position.set((c - 3.5) * SQ, 0.06, (r - 3.5) * SQ);
       m.receiveShadow = true;
       m.userData.sq = i;
       boardG.add(m); tiles.push(m);
-      if (!lt && LOOK.board === 'carretera') { const ln = new T.Mesh(box(0.08, 0.02, 0.32), mat('#FFFFFF', 0.5)); ln.position.set(c - 3.5, 0.13, r - 3.5); boardG.add(ln); }
-      if (!lt && LOOK.board === 'pasto') [[-0.25, -0.2], [0.22, 0.15], [-0.05, 0.3]].forEach(([dx, dz]) => { const b2 = new T.Mesh(cone(0.04, 0.1), mat('#5DB86A', 0.6)); b2.position.set(c - 3.5 + dx, 0.17, r - 3.5 + dz); boardG.add(b2); });
+      if (!lt && LOOK.board === 'carretera') { const ln = new T.Mesh(box(0.08, 0.02, 0.32), mat('#FFFFFF', 0.5)); ln.position.set((c - 3.5) * SQ, 0.13, (r - 3.5) * SQ); boardG.add(ln); }
+      if (!lt && LOOK.board === 'pasto') [[-0.25, -0.2], [0.22, 0.15], [-0.05, 0.3]].forEach(([dx, dz]) => { const b2 = new T.Mesh(cone(0.04, 0.1), mat('#5DB86A', 0.6)); b2.position.set((c - 3.5 + dx) * SQ, 0.17, (r - 3.5 + dz) * SQ); boardG.add(b2); });
       if (!lt && (LOOK.board === 'galleta' || LOOK.board === 'noche')) {
         const dot = LOOK.board === 'galleta' ? mat('#7A4A2A', 0.8) : mat('#FFF1C9', 0.4, { emissive: col('#FFF1C9'), emissiveIntensity: 0.6 });
         [[-0.22, -0.2], [0.2, 0.12], [-0.08, 0.28]].forEach(([dx, dz], k) => {
           const d = new T.Mesh(cyl(LOOK.board === 'galleta' ? 0.07 : 0.035, LOOK.board === 'galleta' ? 0.07 : 0.035, 0.03, 10), dot);
-          d.position.set(c - 3.5 + dx, 0.13, r - 3.5 + dz); boardG.add(d);
+          d.position.set((c - 3.5 + dx) * SQ, 0.13, (r - 3.5 + dz) * SQ); boardG.add(d);
         });
       }
     }
@@ -2182,8 +2183,8 @@ const GL = (() => {
     g.center(); return g;
   });
   function overlay(i, hex, op, pulse) {
-    const m = new T.Mesh(geo('ov', () => { const g = new T.PlaneGeometry(0.98, 0.98); g.rotateX(-Math.PI / 2); return g; }), basic(hex, op).clone());
-    m.position.set((i & 7) - 3.5, 0.125, (i >> 3) - 3.5);
+    const m = new T.Mesh(geo('ov', () => { const g = new T.PlaneGeometry(0.98 * SQ, 0.98 * SQ); g.rotateX(-Math.PI / 2); return g; }), basic(hex, op).clone());
+    m.position.set(((i & 7) - 3.5) * SQ, 0.125, ((i >> 3) - 3.5) * SQ);
     m.userData.own = true;
     markG.add(m);
     if (pulse) pulses.push({ m, base: op });
@@ -2227,10 +2228,10 @@ const GL = (() => {
   }
   function placeCamera() {
     const hHalf = Math.atan(Math.tan(T.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
-    const d = Math.max(9.6, 5.75 / Math.tan(hHalf)) / cam.zoom;
-    const off = 0.55 * Math.cos(cam.el) / Math.cos(CAM0.el);
+    const d = Math.max(9.2 * SQ, 5.6 * SQ / Math.tan(hHalf)) / cam.zoom;
+    const off = 0.55 * SQ * Math.cos(cam.el) / Math.cos(CAM0.el);
     camera.position.set(Math.sin(cam.az) * Math.cos(cam.el) * d, Math.sin(cam.el) * d, Math.cos(cam.az) * Math.cos(cam.el) * d);
-    camera.lookAt(Math.sin(cam.az) * off, -0.2, Math.cos(cam.az) * off);
+    camera.lookAt(Math.sin(cam.az) * off, -0.25, Math.cos(cam.az) * off);
   }
   const saveCam = () => { P.cam = { az: cam.az % (Math.PI * 2), el: cam.el, zoom: cam.zoom }; P.camTip = 1; save(); tip.hidden = true; };
   const ray = new T.Raycaster(), ndc = new T.Vector2();

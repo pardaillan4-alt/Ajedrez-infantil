@@ -2321,7 +2321,7 @@ const GL = (() => {
       const m = bimg ? new T.Mesh(tplane, MAT['ph' + lt] || (MAT['ph' + lt] = new T.MeshBasicMaterial({ color: col(lt ? '#FFFFFF' : '#080818'), transparent: true, opacity: lt ? 0.3 : 0.45, depthWrite: false })))
         : new T.Mesh(tg, glassB ? crys(h === light ? '#EAF7FF' : '#9FD3F0', lt ? 0.55 : 0.7) : mat(h, 0.75));
       m.position.set((c - 3.5) * SQ, bimg ? 0.123 : 0.06, (r - 3.5) * SQ);
-      if (hideStd) m.visible = false;
+      if (hideStd) m.material = MAT.ghost || (MAT.ghost = new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }));
       m.receiveShadow = true;
       m.userData.sq = i;
       boardG.add(m); tiles.push(m);
@@ -2531,8 +2531,15 @@ const GL = (() => {
     ndc.set((x - r.left) / r.width * 2 - 1, -((y - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
     let j = -1, i = -1;
-    const ph = ray.intersectObjects(pieceG.children, true)[0];
-    if (ph) { let o = ph.object; while (o && o.parent !== pieceG) o = o.parent; if (o && !o.userData.anim) j = o.userData.sq; }
+    const seen = [];
+    ray.intersectObjects(pieceG.children, true).forEach(h => { let o = h.object; while (o && o.parent !== pieceG) o = o.parent; if (o && !o.userData.anim && !seen.includes(o.userData.sq)) seen.push(o.userData.sq); });
+    if (seen.length) {
+      j = seen[0];
+      const can = k => { const p = G.s.b[k]; return p && (E.isW(p) ? 'w' : 'b') === G.s.turn && E.legal(G.s).some(m => m.from === k); };
+      const tgt = k => G.sel >= 0 && G.moves.some(m => m.to === k);
+      const pref = seen.find(tgt) ?? (can(j) ? j : seen.find(can));
+      if (pref !== undefined) j = pref;
+    }
     const th = ray.intersectObjects(tiles, false)[0];
     if (th) i = th.object.userData.sq;
     if (i < 0) return j;

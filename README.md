@@ -9,7 +9,7 @@ Ajedrez tierno para niños. Aprenden a mover cada pieza, resuelven retos de jaqu
 - **Aprender:** 6 lecciones (una por pieza) y 5 retos de mate en 1.
 - **Aventura:** la historia de la Corona de Estrellas, 12 capítulos con dificultad creciente.
 - **Dos jugadores** en el mismo celular o tableta.
-- **Mi estilo:** 6 parejas de colores, 12 diseños de piezas (Mimitos, Selva, Cristal, Jardín, Fuego y agua, Carritos, Espacio, Gatitos, Dulces, Robots, Clásicas), 14 tableros y 11 fondos (incluye un fondo espacial generado).
+- **Mi estilo:** 6 parejas de colores, 12 diseños de piezas (Mimitos, Selva, Cristal, Jardín, Fuego y agua, Carritos, Espacio, Gatitos, Dulces, Robots, Clásicas), 14 tableros y 15 fondos (incluye un fondo espacial generado y 4 fotos reales del espacio).
 - **Vista 2D y 3D** con tablero que se puede girar y acercar.
 - **Música clásica** con control de volumen.
 
@@ -42,3 +42,12 @@ Obras de dominio público. Grabaciones obtenidas de Musopen y fuentes similares:
 | Danza de los mirlitones, Danza china, Danza rusa, Galope de los niños (El Cascanueces) | Chaikovski | |
 
 Las melodías extra (Minueto en Sol, Oda a la alegría, Estrellita, Para Elisa, Canon en Re y Pequeña serenata) las genera la app con un violín y un piano sintetizados.
+
+## Créditos de las fotos del espacio
+
+| Fondo | Crédito |
+|---|---|
+| Nebulosa de Carina (Acantilados Cósmicos) | NASA, ESA, CSA, STScI (telescopio James Webb) |
+| Andrómeda (M31) | ESA/Herschel/PACS & SPIRE Consortium, O. Krause, HSC, H. Linz |
+| Nebulosa de la Hélice | NASA/JPL-Caltech (telescopio Spitzer) |
+| Galaxia NGC 4013 | NASA y The Hubble Heritage Team (STScI/AURA) |

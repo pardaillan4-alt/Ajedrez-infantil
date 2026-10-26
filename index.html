@@ -335,12 +335,13 @@ body[data-bg="ciudad"]{background-color:#E6ECF5;background-image:linear-gradient
 body[data-board="espacio"]{--sq-light:#C9C2F2;--sq-dark:#2E2A5E;--frame:#1E1B40;--edge1:#5B4FB5;--edge2:#2A2560}
 body[data-board="espacio"] .sqr.d{background-image:radial-gradient(circle at 28% 30%,#FFF1C9 0 3%,transparent 4%),radial-gradient(circle at 70% 66%,#CFE0FF 0 2.5%,transparent 3.5%),radial-gradient(circle at 60% 22%,#fff 0 1.8%,transparent 2.6%)}
 body[data-board="espacio"] .sqr .rk,body[data-board="espacio"] .sqr .fl{color:#fff}
-body[data-bg="espacio"]{background-color:#0b0f2a;background-size:cover;background-position:center;background-attachment:fixed;--stage1:rgba(10,14,40,.25);--stage2:rgba(10,14,40,0)}
-body[data-bg="espacio"] .clouds{display:none!important}
-body[data-bg="espacio"] .logo,body[data-bg="espacio"] .tag,body[data-bg="espacio"] .bar h2,body[data-bg="espacio"] .section-title,body[data-bg="espacio"] .hint-text,body[data-bg="espacio"] .tray .lbl,body[data-bg="espacio"] .status{color:#F3EEFF;text-shadow:0 2px 10px rgba(0,0,0,.6)}
-body[data-bg="espacio"] .logo span{color:#FF8FB0}
-body[data-bg="espacio"] .status.warn{color:#FFB3C8}
+body[data-dark]{background-color:#0b0f2a;background-size:cover;background-position:center;background-attachment:fixed;--stage1:rgba(10,14,40,.25);--stage2:rgba(10,14,40,0)}
+body[data-dark] .clouds{display:none!important}
+body[data-dark] .logo,body[data-dark] .tag,body[data-dark] .bar h2,body[data-dark] .section-title,body[data-dark] .hint-text,body[data-dark] .tray .lbl,body[data-dark] .status,body[data-dark] .credit{color:#F3EEFF;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+body[data-dark] .logo span{color:#FF8FB0}
+body[data-dark] .status.warn{color:#FFB3C8}
 .bgsw[data-bg="espacio"]{background:radial-gradient(circle at 30% 30%,rgba(186,64,150,.6),transparent 55%),radial-gradient(circle at 70% 70%,rgba(64,96,230,.7),transparent 55%),radial-gradient(circle at 20% 70%,#fff 0 1px,transparent 1.5px) 0 0/9px 9px,#0b0f2a}
+.credit{margin:-4px 0 0;font-size:.78rem;color:var(--ink-soft);text-align:center}
 [hidden]{display:none!important}
 #confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:60}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -399,6 +400,7 @@ body[data-bg="espacio"] .status.warn{color:#FFB3C8}
   <p class="section-title">Diseño de las piezas</p><div class="opts" id="st-sets"></div>
   <p class="section-title">Tablero</p><div class="opts" id="st-boards"></div>
   <p class="section-title">Fondo</p><div class="opts" id="st-bgs"></div>
+  <p class="credit" id="st-credit" hidden></p>
 </section>
 
 <section class="screen" id="s-game" hidden>
@@ -748,7 +750,11 @@ const BGS = [
   { id: 'cristalbg', name: 'Cristal', at: 0 },
   { id: 'volcan', name: 'Volcán y mar', at: 0 },
   { id: 'ciudad', name: 'Ciudad', at: 0 },
-  { id: 'espacio', name: 'Espacio', at: 0 },
+  { id: 'espacio', name: 'Espacio', at: 0, dark: true },
+  { id: 'carina', name: 'Nebulosa de Carina', at: 0, dark: true, img: 'bg/carina.jpg', credit: 'Foto: NASA, ESA, CSA, STScI (telescopio James Webb)' },
+  { id: 'andromeda', name: 'Andrómeda', at: 0, dark: true, img: 'bg/andromeda.jpg', credit: 'Foto: ESA/Herschel/PACS & SPIRE Consortium, O. Krause, HSC, H. Linz' },
+  { id: 'helix', name: 'Nebulosa de la Hélice', at: 0, dark: true, img: 'bg/helix.jpg', credit: 'Foto: NASA/JPL-Caltech (telescopio Spitzer)' },
+  { id: 'ngc4013', name: 'Galaxia de canto', at: 0, dark: true, img: 'bg/ngc4013.jpg', credit: 'Foto: NASA y The Hubble Heritage Team (STScI/AURA)' },
 ];
 let LOOK = { pal: 'uva', set: 'mimo', board: 'fresa', bg: 'puntitos' };
 const byId = (arr, id) => arr.find(x => x.id === id) || arr[0];
@@ -2271,7 +2277,7 @@ const GL = (() => {
   function ensureLook() {
     const k = LOOK.pal + LOOK.set + LOOK.board + LOOK.bg;
     if (k === lookKey) return;
-    lookKey = k; buildBoard(); clearPieces(); starfield(LOOK.bg === 'espacio');
+    lookKey = k; buildBoard(); clearPieces(); starfield(!!byId(BGS, LOOK.bg).dark);
   }
   function place(ch, i) {
     const g = build(ch, LOOK);
@@ -2892,7 +2898,9 @@ function spaceBG() {
 function applyLook() {
   document.body.setAttribute('data-board', LOOK.board);
   document.body.setAttribute('data-bg', LOOK.bg);
-  document.body.style.backgroundImage = LOOK.bg === 'espacio' ? `url(${spaceBG()})` : '';
+  const bgi = byId(BGS, LOOK.bg);
+  document.body.style.backgroundImage = bgi.img ? `url(${bgi.img})` : LOOK.bg === 'espacio' ? `url(${spaceBG()})` : '';
+  if (bgi.dark) document.body.setAttribute('data-dark', '1'); else document.body.removeAttribute('data-dark');
   GL.refresh();
 }
 function renderStyle() {
@@ -2912,7 +2920,10 @@ function renderStyle() {
   $('st-colors').innerHTML = PALETTES.map(it => tile('pal', it, pieceSVG('P', { ...LOOK, set: cset, pal: it.id }) + pieceSVG('p', { ...LOOK, set: cset, pal: it.id }))).join('');
   $('st-sets').innerHTML = SETS.map(it => tile('set', it, pieceSVG('N', { ...LOOK, set: it.id }) + pieceSVG('p', { ...LOOK, set: it.id }))).join('');
   $('st-boards').innerHTML = BOARDS.map(it => tile('board', it, `<span class="chk" style="--a:${it.c[0]};--b:${it.c[1]};--c:${it.c[2] || it.c[1]};--d:${it.c[3] || it.c[1]}"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>`)).join('');
-  $('st-bgs').innerHTML = BGS.map(it => tile('bg', it, `<span class="bgsw" data-bg="${it.id}"></span>`)).join('');
+  $('st-bgs').innerHTML = BGS.map(it => tile('bg', it, `<span class="bgsw" data-bg="${it.id}"${it.img ? ` style="background:#0b0f2a url(${it.img.replace('.jpg', '-mini.jpg')}) center/cover"` : ''}></span>`)).join('');
+  const cr = byId(BGS, LOOK.bg).credit;
+  $('st-credit').textContent = cr || '';
+  $('st-credit').hidden = !cr;
   $('s-style').querySelectorAll('.opt').forEach(b => b.onclick = () => {
     const it = [...PALETTES, ...SETS, ...BOARDS, ...BGS].find(x => x.id === b.dataset.id && b.closest('.opts').id === { pal: 'st-colors', set: 'st-sets', board: 'st-boards', bg: 'st-bgs' }[b.dataset.g]);
     if (it && n < it.at) { sfx.oops(); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); return; }

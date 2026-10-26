@@ -345,6 +345,17 @@ body[data-dark] .status.warn{color:#FFB3C8}
 
 body[data-board="caricatura"]{--sq-light:#F5F5F5;--sq-dark:#183B4B;--frame:#63431D;--edge1:#4A3015;--edge2:#2E1C0B}
 body[data-board="caricatura"] .sqr .rk,body[data-board="caricatura"] .sqr .fl{color:#8a9aa4}
+/* frases del catecismo */
+.cat{display:flex;align-items:center;gap:12px;text-align:left;background:var(--card);border-radius:18px;padding:10px 14px;box-shadow:var(--shadow);width:100%;border-left:6px solid #F2B84B}
+.cat .ci{flex:none;width:42px;height:42px;border-radius:50%;background:#FFF4D6;display:grid;place-items:center}
+.cat .ci svg{width:30px;height:30px}
+.cat small{display:block;font-size:.74rem;color:var(--ink-soft);letter-spacing:.02em}
+.cat .ct{display:block;font-size:1rem;line-height:1.3;color:var(--ink);text-wrap:pretty}
+.cat.pop{animation:catin .55s cubic-bezier(.2,1.4,.4,1)}
+@keyframes catin{0%{opacity:0;transform:translateY(10px) scale(.96)}100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cat.pop{animation:none}}
+.cat-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cat-opts .btn{font-size:1rem;padding:10px 12px}
 /* tableros con foto */
 body[data-photo]{--sq-light:transparent;--sq-dark:transparent;--frame:#1E1B40;--edge1:#5B4FB5;--edge2:#2A2560}
 body[data-photo] .board{background:#0b0f2a var(--board-img) center/cover no-repeat}
@@ -413,6 +424,9 @@ body[data-photo] .sqr .rk,body[data-photo] .sqr .fl{color:#fff;opacity:.9}
   <p class="section-title">Tablero</p><div class="opts" id="st-boards"></div>
   <p class="section-title">Fondo</p><div class="opts" id="st-bgs"></div>
   <p class="credit" id="st-credit" hidden></p>
+  <p class="section-title">Frases del Catecismo</p>
+  <p class="hint-text">Mientras juegas aparecen frases cortas del Catecismo de la Iglesia Católica.</p>
+  <div class="cat-opts" id="st-cat"></div>
 </section>
 
 <section class="screen" id="s-game" hidden>
@@ -424,6 +438,7 @@ body[data-photo] .sqr .rk,body[data-photo] .sqr .fl{color:#fff;opacity:.9}
   <div class="stage" id="stage"><div class="clouds" aria-hidden="true"><i></i><i></i><i></i></div><div class="glbox"><div class="gl" id="gl"></div><button class="gl-reset" id="gl-reset" aria-label="Centrar el tablero"><svg viewBox="0 0 24 24" fill="none" stroke="#3B2A55" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12 a8 8 0 1 1 -2.3 -5.7"/><path d="M19 3 V7.5 H14.5"/></svg></button><div class="gl-tip" id="gl-tip">Desliza para girar el tablero · usa dos dedos para acercar</div></div><div class="boardwrap"><div class="board" id="board"></div></div></div>
   <div class="tray" id="tray-bot"></div>
   <div class="status" id="g-status"></div>
+  <button class="cat" id="g-cat" hidden aria-label="Frase del Catecismo. Toca para ver otra"></button>
   <div class="actions" id="g-actions">
     <button class="act" id="a-hint"></button>
     <button class="act" id="a-undo"></button>
@@ -1584,6 +1599,66 @@ let G = null;
 const board = $('board');
 const FILES = 'abcdefgh';
 
+
+// Frases del Catecismo de la Iglesia Católica, adaptadas para niños (n. = número del Catecismo)
+const CAT = [
+  [1, 'Dios nos creó por amor, para que vivamos felices con Él.'],
+  [27, 'Dios puso en nuestro corazón el deseo de conocerlo. Solo en Él encontramos la verdadera felicidad.'],
+  [221, 'Dios es Amor: Padre, Hijo y Espíritu Santo.'],
+  [234, 'La Santísima Trinidad es el centro de nuestra fe: un solo Dios en tres Personas.'],
+  [295, 'Dios creó el mundo con sabiduría y con amor.'],
+  [357, 'Dios nos hizo a su imagen. Por eso cada persona es muy valiosa.'],
+  [336, 'Cada uno de nosotros tiene a su lado un ángel de la guarda que lo cuida y lo guía.'],
+  [458, 'El Hijo de Dios se hizo hombre para que conociéramos el amor de Dios.'],
+  [971, 'Todas las generaciones llaman bienaventurada a la Virgen María.'],
+  [1024, 'El cielo es estar para siempre con Dios: la felicidad más grande.'],
+  [1210, 'Jesús nos dejó siete sacramentos: Bautismo, Confirmación, Eucaristía, Penitencia, Unción de los enfermos, Orden sacerdotal y Matrimonio.'],
+  [1213, 'El Bautismo es la puerta que nos abre a la vida cristiana.'],
+  [1324, 'La Eucaristía es fuente y cumbre de toda la vida cristiana.'],
+  [1422, 'En la Confesión, Dios nos perdona con su misericordia.'],
+  [1439, 'Como el papá del hijo pródigo, Dios siempre nos espera con los brazos abiertos.'],
+  [1716, 'Las Bienaventuranzas de Jesús nos enseñan el camino a la verdadera felicidad.'],
+  [1776, 'En nuestra conciencia, Dios nos dice: haz el bien y evita el mal.'],
+  [1803, 'La virtud es la costumbre firme de hacer el bien.'],
+  [1806, 'La prudencia nos ayuda a pensar bien antes de actuar. ¡Como antes de mover una pieza!'],
+  [1807, 'La justicia es dar a Dios y a los demás lo que les corresponde.'],
+  [1808, 'La fortaleza nos da valor para seguir haciendo el bien, aunque cueste.'],
+  [1809, 'La templanza nos ayuda a disfrutar las cosas buenas con medida.'],
+  [1814, 'Por la fe creemos en Dios y en todo lo que Él nos ha dicho.'],
+  [1817, 'Por la esperanza deseamos el cielo y confiamos en la ayuda de Dios.'],
+  [1822, 'Por la caridad amamos a Dios sobre todas las cosas y a los demás como a nosotros mismos.'],
+  [1829, 'El amor trae alegría, paz y misericordia.'],
+  [1847, 'San Agustín decía: «Dios, que te creó sin ti, no te salvará sin ti».'],
+  [1849, 'El pecado es faltar al amor a Dios y a los demás.'],
+  [2083, 'Jesús enseñó: «Amarás al Señor tu Dios con todo tu corazón, con toda tu alma y con toda tu mente».'],
+  [2196, 'Jesús nos pide: «Amarás a tu prójimo como a ti mismo».'],
+  [2180, 'El domingo los cristianos vamos a Misa para celebrar a Jesús resucitado.'],
+  [2197, 'El cuarto mandamiento nos pide honrar a nuestro papá y a nuestra mamá.'],
+  [2305, 'Jesús es nuestra paz.'],
+  [2415, 'Dios nos pide cuidar y respetar toda su creación: plantas, animales y personas.'],
+  [2447, 'Las obras de misericordia son ayudar a los demás en lo que necesitan, en el cuerpo y en el alma.'],
+  [2468, 'Decir la verdad con palabras y con acciones es la virtud de la veracidad.'],
+  [2559, 'Rezar es elevar el corazón a Dios.'],
+  [2697, 'La oración es la vida del corazón nuevo. Podemos rezar en todo momento.'],
+  [2761, 'El Padrenuestro es el resumen de todo el Evangelio.'],
+];
+const DOVE = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 22 C10 14 18 12 23 15 L30 9 C33 8 35 10 34 13 L30 17 C31 25 24 31 15 30 L9 33 L11 28 C8 27 6 25 6 22Z" fill="#fff" stroke="#3B2A55" stroke-width="1.8" stroke-linejoin="round"/><path d="M13 21 C16 17 21 17 24 20" fill="none" stroke="#3B2A55" stroke-width="1.6" stroke-linecap="round"/><circle cx="30.5" cy="12" r="1.3" fill="#3B2A55"/><path d="M34 12.5 L37.5 13 L34.3 14.8" fill="#F2B84B" stroke="#3B2A55" stroke-width="1.2" stroke-linejoin="round"/></svg>';
+if (typeof P.catI !== 'number') P.catI = Math.floor(Math.random() * CAT.length);
+function showCat() {
+  const el = $('g-cat');
+  if (P.cat === false) { el.hidden = true; return; }
+  const [n, t] = CAT[P.catI % CAT.length];
+  P.catI = (P.catI + 1) % CAT.length; save();
+  el.innerHTML = `<span class="ci">${DOVE}</span><span><small>Del Catecismo · n. ${n}</small><span class="ct">${t}</span></span>`;
+  el.hidden = false;
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+}
+$('g-cat').onclick = () => { sfx.tap(); showCat(); };
+function renderCatOpt() {
+  const on = P.cat !== false;
+  $('st-cat').innerHTML = `<button class="btn ${on ? '' : 'alt'}" data-cat="1" aria-pressed="${on}">Mostrar frases</button><button class="btn ${on ? 'alt' : ''}" data-cat="0" aria-pressed="${!on}">Ocultar frases</button>`;
+}
+$('st-cat').onclick = e => { const b = e.target.closest('[data-cat]'); if (!b) return; sfx.tap(); P.cat = b.dataset.cat === '1'; save(); renderCatOpt(); };
 function baseGame(mode, s, title) {
   G = { mode, s, hist: [], sel: -1, moves: [], last: null, pop: -1, hint: null, hints: 0, undos: 0, over: false, busy: false };
   $('g-title').textContent = title;
@@ -1595,6 +1670,7 @@ function baseGame(mode, s, title) {
   $('a-undo').disabled = mode === 'puzzle';
   renderSound();
   show('game');
+  G.plies = 0; showCat();
 }
 function bubble(html, avKind) {
   if (avKind) $('g-av').innerHTML = avKind;
@@ -2762,6 +2838,8 @@ function applyMove(m) {
   G.hist.push({ s: G.s, last: G.last, targets: G.targets ? new Set(G.targets) : null, count: G.count });
   G.s = E.make(G.s, m);
   G.last = m; G.sel = -1; G.moves = []; G.pop = m.to; G.hint = null;
+  G.plies = (G.plies || 0) + 1;
+  if ((G.mode === 'ai' || G.mode === 'duo') && G.plies % 6 === 0) setTimeout(showCat, 700);
 }
 
 function playerMove(m) {
@@ -3028,6 +3106,7 @@ function applyLook() {
   GL.refresh();
 }
 function renderStyle() {
+  renderCatOpt();
   const n = totalStars();
   $('st-count').innerHTML = `${starSVG(true)}<span>Tienes <b>${n}</b> estrellas. Gana más para abrir diseños nuevos.</span>`;
   const demo = ['r', '', 'q', 'k', '', 'p', 'n', '', 'P', 'N', '', '', 'B', '', 'K', 'Q'];

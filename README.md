@@ -9,7 +9,7 @@ Ajedrez tierno para niños. Aprenden a mover cada pieza, resuelven retos de jaqu
 - **Aprender:** 6 lecciones (una por pieza) y 5 retos de mate en 1.
 - **Aventura:** la historia de la Corona de Estrellas, 12 capítulos con dificultad creciente.
 - **Dos jugadores** en el mismo celular o tableta.
-- **Mi estilo:** 6 parejas de colores, 14 diseños de piezas (Mimitos, Selva, Cristal, Jardín, Fuego y agua, Carritos, Espacio, Ébano y marfil, Elegantes, Gatitos, Dulces, Robots, Clásicas), 18 tableros (4 con fotos del espacio) y 15 fondos (incluye un fondo espacial generado y 4 fotos reales del espacio).
+- **Mi estilo:** 6 parejas de colores, 15 diseños de piezas (Mimitos, Selva, Cristal, Jardín, Fuego y agua, Carritos, Espacio, Caricatura, Ébano y marfil, Elegantes, Gatitos, Dulces, Robots, Clásicas), 19 tableros (4 con fotos del espacio) y 15 fondos (incluye un fondo espacial generado y 4 fotos reales del espacio).
 - **Vista 2D y 3D** con tablero que se puede girar y acercar.
 - **Música clásica** con control de volumen.
 
@@ -56,3 +56,4 @@ Las melodías extra (Minueto en Sol, Oda a la alegría, Estrellita, Para Elisa, 
 
 - Diseño **Elegantes**: modelo "Chess Set" de Pia Leung, licencia Creative Commons Atribución (CC BY), vía Poly Pizza.
 - Diseño **Ébano y marfil**: modelo "CHESS BOARD" de Kmunawwar703 (https://sketchfab.com/kmunawar703), licencia CC BY 4.0, vía Sketchfab. Se simplificó la geometría para que funcione en celulares (`models/fino.json`).
+- Diseño y tablero **Caricatura**: modelo "Cartoon Chess Set" de CYX1122 (https://sketchfab.com/CYX1122), licencia CC BY 4.0, vía Sketchfab. Se conservaron sus colores y su tablero; se simplificó la geometría (`models/caricatura.json`).

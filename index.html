@@ -1694,17 +1694,21 @@ const GL = (() => {
 
   const scene = new T.Scene();
   const camera = new T.PerspectiveCamera(34, 1, 0.1, 100);
-  scene.add(new T.HemisphereLight(0xffffff, 0xb9a8ec, 0.32));
-  const sun = new T.DirectionalLight(0xfff4e6, 0.68);
+  scene.add(new T.HemisphereLight(0xffffff, 0xb9a8ec, 0.26));
+  const sun = new T.DirectionalLight(0xfff4e6, 0.6);
   sun.position.set(-4, 11, 7);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.mapSize.set(1536, 1536);
+  sun.shadow.radius = 3;
   Object.assign(sun.shadow.camera, { left: -7 * 1.32, right: 7 * 1.32, top: 7 * 1.32, bottom: -7 * 1.32, near: 1, far: 34 });
   sun.shadow.bias = -0.0006;
   scene.add(sun);
   const fill = new T.DirectionalLight(0xffe9f3, 0.18);
   fill.position.set(5, 4, 8);
   scene.add(fill);
+  const rim = new T.DirectionalLight(0xfff0fa, 0.3);
+  rim.position.set(-2, 6, -9);
+  scene.add(rim);
 
   try {
     const envScene = new T.Scene();
@@ -1732,14 +1736,14 @@ const GL = (() => {
   const geo = (k, f) => GEO[k] || (GEO[k] = f());
   const mat = (hex, rough = 0.55, extra = {}) => {
     const k = hex + rough + JSON.stringify(extra);
-    return MAT[k] || (MAT[k] = new T.MeshStandardMaterial(Object.assign({ color: col(hex), roughness: rough, metalness: 0, envMapIntensity: 0.7 }, extra)));
+    return MAT[k] || (MAT[k] = new T.MeshStandardMaterial(Object.assign({ color: col(hex), roughness: rough, metalness: 0, envMapIntensity: 0.6 }, extra)));
   };
   const basic = (hex, op) => {
     const k = 'b' + hex + op;
     return MAT[k] || (MAT[k] = new T.MeshBasicMaterial({ color: col(hex), transparent: true, opacity: op, depthWrite: false }));
   };
-  const lathe = (k, pts) => geo(k, () => new T.LatheGeometry(pts.map(([x, y]) => new T.Vector2(x, y)), 28));
-  const sphere = r => geo('s' + r, () => r < 0.07 ? new T.SphereGeometry(r, 10, 8) : new T.SphereGeometry(r, 24, 16));
+  const lathe = (k, pts) => geo(k, () => new T.LatheGeometry(new T.SplineCurve(pts.map(([x, y]) => new T.Vector2(x, y))).getPoints(Math.max(12, pts.length * 3)), 36));
+  const sphere = r => geo('s' + r, () => r < 0.07 ? new T.SphereGeometry(r, 12, 9) : new T.SphereGeometry(r, 32, 22));
   const cyl = (a, b, h, n = 24) => geo(`c${a}_${b}_${h}_${n}`, () => new T.CylinderGeometry(a, b, h, n));
   const box = (x, y, z) => geo(`b${x}_${y}_${z}`, () => new T.BoxGeometry(x, y, z));
   const cone = (r, h) => geo(`k${r}_${h}`, () => new T.ConeGeometry(r, h, 20));
@@ -2301,8 +2305,36 @@ const GL = (() => {
     if (k === lookKey) return;
     lookKey = k; buildBoard(); clearPieces(); starfield(!!byId(BGS, LOOK.bg).dark);
   }
+  const OUTM = {};
+  const outlineMat = hex => OUTM[hex] || (OUTM[hex] = new T.ShaderMaterial({
+    uniforms: { c: { value: col(hex) }, t: { value: 0.02 } }, side: T.BackSide,
+    vertexShader: 'uniform float t; void main(){ vec3 p = position + normalize(normal) * t; gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }',
+    fragmentShader: 'uniform vec3 c; void main(){ gl_FragColor = vec4(c, 1.0); }' }));
+  const blobTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d'); const g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, 'rgba(30,20,60,.55)'); g.addColorStop(0.55, 'rgba(30,20,60,.22)'); g.addColorStop(1, 'rgba(30,20,60,0)'); x.fillStyle = g; x.fillRect(0, 0, 64, 64); return new T.CanvasTexture(c); })();
+  const blobMat = new T.MeshBasicMaterial({ map: blobTex, transparent: true, depthWrite: false });
+  const blobGeo = (() => { const g = new T.PlaneGeometry(1, 1); g.rotateX(-Math.PI / 2); return g; })();
+  function polish(g, ch) {
+    const w = ch === ch.toUpperCase();
+    const set = LOOK.set;
+    const pal = byId(PALETTES, LOOK.pal)[w ? 'w' : 'b'];
+    const lineHex = set === 'elementos' ? (w ? '#1F6FA8' : '#B4361C') : '#' + new T.Color(pal[1]).multiplyScalar(0.72).getHexString();
+    const om = outlineMat(lineHex), list = [];
+    g.traverse(o => {
+      if (!o.isMesh || o.material.transparent || o.material.isMeshBasicMaterial || o.material.isShaderMaterial) return;
+      const gt = o.geometry.type; if (gt === 'BoxGeometry' || gt === 'PlaneGeometry' || gt === 'ShapeGeometry') return;
+      if (!o.geometry.boundingSphere) o.geometry.computeBoundingSphere();
+      const sc = Math.max(o.scale.x, o.scale.y, o.scale.z);
+      if (o.geometry.boundingSphere.radius * sc < 0.085) return;
+      if (o.material.emissiveIntensity > 0.3) return;
+      list.push(o);
+    });
+    list.forEach(o => { const l = new T.Mesh(o.geometry, om); l.castShadow = false; l.raycast = () => {}; o.add(l); });
+    const blob = new T.Mesh(blobGeo, blobMat); blob.scale.set(0.95, 1, 0.95); blob.position.y = 0.004; blob.raycast = () => {}; blob.renderOrder = -1;
+    g.add(blob);
+  }
   function place(ch, i) {
     const g = build(ch, LOOK);
+    polish(g, ch);
     g.position.copy(pos(i));
     g.userData.sq = i;
     g.userData.k = 1.18;

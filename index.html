@@ -342,6 +342,15 @@ body[data-dark] .logo span{color:#FF8FB0}
 body[data-dark] .status.warn{color:#FFB3C8}
 .bgsw[data-bg="espacio"]{background:radial-gradient(circle at 30% 30%,rgba(186,64,150,.6),transparent 55%),radial-gradient(circle at 70% 70%,rgba(64,96,230,.7),transparent 55%),radial-gradient(circle at 20% 70%,#fff 0 1px,transparent 1.5px) 0 0/9px 9px,#0b0f2a}
 .credit{margin:-4px 0 0;font-size:.78rem;color:var(--ink-soft);text-align:center}
+
+/* tableros con foto */
+body[data-photo]{--sq-light:transparent;--sq-dark:transparent;--frame:#1E1B40;--edge1:#5B4FB5;--edge2:#2A2560}
+body[data-photo] .board{background:#0b0f2a var(--board-img) center/cover no-repeat}
+body[data-photo] .board .sqr.l{background-color:rgba(255,255,255,.3)}
+body[data-photo] .board .sqr.d{background-color:rgba(8,8,26,.45);background-image:none}
+body[data-photo] .sqr .rk,body[data-photo] .sqr .fl{color:#fff;opacity:.9}
+.chk.photo{background-size:cover;background-position:center}
+.chk.photo i{background:rgba(255,255,255,.3)}.chk.photo i:nth-child(2n){background:rgba(8,8,26,.45)}
 [hidden]{display:none!important}
 #confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:60}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -738,6 +747,10 @@ const BOARDS = [
   { id: 'fuegoagua', name: 'Fuego y agua', at: 0, c: ['#D6F0FF', '#FFC2A0'] },
   { id: 'carretera', name: 'Carretera', at: 0, c: ['#CDD1DC', '#6B6F80'] },
   { id: 'espacio', name: 'Espacio', at: 0, c: ['#C9C2F2', '#2E2A5E'] },
+  { id: 'tcarina', name: 'Carina', at: 0, c: ['#C9C2F2', '#2E2A5E'], img: 'bg/carina-tablero.jpg' },
+  { id: 'tandromeda', name: 'Andrómeda', at: 0, c: ['#C9C2F2', '#2E2A5E'], img: 'bg/andromeda-tablero.jpg' },
+  { id: 'thelix', name: 'Hélice', at: 0, c: ['#C9C2F2', '#2E2A5E'], img: 'bg/helix-tablero.jpg' },
+  { id: 'tngc4013', name: 'Galaxia', at: 0, c: ['#C9C2F2', '#2E2A5E'], img: 'bg/ngc4013-tablero.jpg' },
 ];
 const BGS = [
   { id: 'puntitos', name: 'Puntitos', at: 0 },
@@ -2229,19 +2242,28 @@ const GL = (() => {
     mid.position.y = -0.42; boardG.add(mid);
     tiles = [];
     const tg = box(SQ, 0.12, SQ);
+    const bimg = byId(BOARDS, LOOK.board).img;
+    if (bimg) {
+      const under = new T.Mesh(box(8 * SQ, 0.12, 8 * SQ), mat('#0b0f2a', 0.8)); under.position.y = 0.06; under.receiveShadow = true; boardG.add(under);
+      const tex = new T.TextureLoader().load(bimg); tex.encoding = T.sRGBEncoding; tex.anisotropy = 4;
+      const photo = new T.Mesh(geo('photoPlane', () => { const g = new T.PlaneGeometry(8 * SQ, 8 * SQ); g.rotateX(-Math.PI / 2); return g; }), new T.MeshStandardMaterial({ map: tex, roughness: 0.55, envMapIntensity: 0.3 }));
+      photo.position.y = 0.121; photo.receiveShadow = true; boardG.add(photo);
+    }
+    const tplane = geo('tplane', () => { const g = new T.PlaneGeometry(SQ, SQ); g.rotateX(-Math.PI / 2); return g; });
     for (let i = 0; i < 64; i++) {
       const r = i >> 3, c = i & 7, lt = (r + c) % 2 === 0;
       let h = lt ? light : dark;
       if (!lt && LOOK.board === 'arcoiris') h = RAINBOW[r];
       const glassB = LOOK.board === 'cristal';
-      const m = new T.Mesh(tg, glassB ? crys(h === light ? '#EAF7FF' : '#9FD3F0', lt ? 0.55 : 0.7) : mat(h, 0.75));
-      m.position.set((c - 3.5) * SQ, 0.06, (r - 3.5) * SQ);
+      const m = bimg ? new T.Mesh(tplane, MAT['ph' + lt] || (MAT['ph' + lt] = new T.MeshBasicMaterial({ color: col(lt ? '#FFFFFF' : '#080818'), transparent: true, opacity: lt ? 0.3 : 0.45, depthWrite: false })))
+        : new T.Mesh(tg, glassB ? crys(h === light ? '#EAF7FF' : '#9FD3F0', lt ? 0.55 : 0.7) : mat(h, 0.75));
+      m.position.set((c - 3.5) * SQ, bimg ? 0.123 : 0.06, (r - 3.5) * SQ);
       m.receiveShadow = true;
       m.userData.sq = i;
       boardG.add(m); tiles.push(m);
       if (!lt && LOOK.board === 'carretera') { const ln = new T.Mesh(box(0.08, 0.02, 0.32), mat('#FFFFFF', 0.5)); ln.position.set((c - 3.5) * SQ, 0.13, (r - 3.5) * SQ); boardG.add(ln); }
       if (!lt && LOOK.board === 'pasto') [[-0.25, -0.2], [0.22, 0.15], [-0.05, 0.3]].forEach(([dx, dz]) => { const b2 = new T.Mesh(cone(0.04, 0.1), mat('#5DB86A', 0.6)); b2.position.set((c - 3.5 + dx) * SQ, 0.17, (r - 3.5 + dz) * SQ); boardG.add(b2); });
-      if (!lt && (LOOK.board === 'galleta' || LOOK.board === 'noche' || LOOK.board === 'espacio')) {
+      if (!lt && !bimg && (LOOK.board === 'galleta' || LOOK.board === 'noche' || LOOK.board === 'espacio')) {
         const dot = LOOK.board === 'galleta' ? mat('#7A4A2A', 0.8) : mat('#FFF1C9', 0.4, { emissive: col('#FFF1C9'), emissiveIntensity: 0.6 });
         [[-0.22, -0.2], [0.2, 0.12], [-0.08, 0.28]].forEach(([dx, dz], k) => {
           const d = new T.Mesh(cyl(LOOK.board === 'galleta' ? 0.07 : 0.035, LOOK.board === 'galleta' ? 0.07 : 0.035, 0.03, 10), dot);
@@ -2901,6 +2923,9 @@ function applyLook() {
   const bgi = byId(BGS, LOOK.bg);
   document.body.style.backgroundImage = bgi.img ? `url(${bgi.img})` : LOOK.bg === 'espacio' ? `url(${spaceBG()})` : '';
   if (bgi.dark) document.body.setAttribute('data-dark', '1'); else document.body.removeAttribute('data-dark');
+  const bdi = byId(BOARDS, LOOK.board);
+  if (bdi.img) { document.body.setAttribute('data-photo', '1'); document.body.style.setProperty('--board-img', `url(${bdi.img})`); }
+  else { document.body.removeAttribute('data-photo'); document.body.style.removeProperty('--board-img'); }
   GL.refresh();
 }
 function renderStyle() {
@@ -2919,7 +2944,7 @@ function renderStyle() {
   const cset = LOOK.set === 'elementos' ? 'mimo' : LOOK.set;
   $('st-colors').innerHTML = PALETTES.map(it => tile('pal', it, pieceSVG('P', { ...LOOK, set: cset, pal: it.id }) + pieceSVG('p', { ...LOOK, set: cset, pal: it.id }))).join('');
   $('st-sets').innerHTML = SETS.map(it => tile('set', it, pieceSVG('N', { ...LOOK, set: it.id }) + pieceSVG('p', { ...LOOK, set: it.id }))).join('');
-  $('st-boards').innerHTML = BOARDS.map(it => tile('board', it, `<span class="chk" style="--a:${it.c[0]};--b:${it.c[1]};--c:${it.c[2] || it.c[1]};--d:${it.c[3] || it.c[1]}"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>`)).join('');
+  $('st-boards').innerHTML = BOARDS.map(it => tile('board', it, `<span class="chk${it.img ? ' photo' : ''}" style="--a:${it.c[0]};--b:${it.c[1]};--c:${it.c[2] || it.c[1]};--d:${it.c[3] || it.c[1]}${it.img ? `;background-image:url(${it.img})` : ''}"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>`)).join('');
   $('st-bgs').innerHTML = BGS.map(it => tile('bg', it, `<span class="bgsw" data-bg="${it.id}"${it.img ? ` style="background:#0b0f2a url(${it.img.replace('.jpg', '-mini.jpg')}) center/cover"` : ''}></span>`)).join('');
   const cr = byId(BGS, LOOK.bg).credit;
   $('st-credit').textContent = cr || '';

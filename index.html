@@ -330,6 +330,17 @@ body[data-bg="ciudad"]{background-color:#E6ECF5;background-image:linear-gradient
 .mp-now b{display:block;font-family:var(--f-display);font-size:1.1rem;line-height:1.15}
 .mp-now small{color:var(--ink-soft);font-size:.8rem}
 .mp-btns{display:flex;gap:8px}.mp-btns .btn{font-size:.95rem;padding:10px 8px}
+
+/* espacio */
+body[data-board="espacio"]{--sq-light:#C9C2F2;--sq-dark:#2E2A5E;--frame:#1E1B40;--edge1:#5B4FB5;--edge2:#2A2560}
+body[data-board="espacio"] .sqr.d{background-image:radial-gradient(circle at 28% 30%,#FFF1C9 0 3%,transparent 4%),radial-gradient(circle at 70% 66%,#CFE0FF 0 2.5%,transparent 3.5%),radial-gradient(circle at 60% 22%,#fff 0 1.8%,transparent 2.6%)}
+body[data-board="espacio"] .sqr .rk,body[data-board="espacio"] .sqr .fl{color:#fff}
+body[data-bg="espacio"]{background-color:#0b0f2a;background-size:cover;background-position:center;background-attachment:fixed;--stage1:rgba(10,14,40,.25);--stage2:rgba(10,14,40,0)}
+body[data-bg="espacio"] .clouds{display:none!important}
+body[data-bg="espacio"] .logo,body[data-bg="espacio"] .tag,body[data-bg="espacio"] .bar h2,body[data-bg="espacio"] .section-title,body[data-bg="espacio"] .hint-text,body[data-bg="espacio"] .tray .lbl,body[data-bg="espacio"] .status{color:#F3EEFF;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+body[data-bg="espacio"] .logo span{color:#FF8FB0}
+body[data-bg="espacio"] .status.warn{color:#FFB3C8}
+.bgsw[data-bg="espacio"]{background:radial-gradient(circle at 30% 30%,rgba(186,64,150,.6),transparent 55%),radial-gradient(circle at 70% 70%,rgba(64,96,230,.7),transparent 55%),radial-gradient(circle at 20% 70%,#fff 0 1px,transparent 1.5px) 0 0/9px 9px,#0b0f2a}
 [hidden]{display:none!important}
 #confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:60}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -704,6 +715,7 @@ const SETS = [
   { id: 'jardin', name: 'Jardín', at: 0 },
   { id: 'elementos', name: 'Fuego y agua', at: 0 },
   { id: 'carros', name: 'Carritos', at: 0 },
+  { id: 'espacio', name: 'Espacio', at: 0 },
   { id: 'gato', name: 'Gatitos', at: 0 },
   { id: 'dulce', name: 'Dulces', at: 0 },
   { id: 'robot', name: 'Robots', at: 8 },
@@ -723,6 +735,7 @@ const BOARDS = [
   { id: 'pasto', name: 'Pasto', at: 0, c: ['#C4EBA6', '#93D27C'] },
   { id: 'fuegoagua', name: 'Fuego y agua', at: 0, c: ['#D6F0FF', '#FFC2A0'] },
   { id: 'carretera', name: 'Carretera', at: 0, c: ['#CDD1DC', '#6B6F80'] },
+  { id: 'espacio', name: 'Espacio', at: 0, c: ['#C9C2F2', '#2E2A5E'] },
 ];
 const BGS = [
   { id: 'puntitos', name: 'Puntitos', at: 0 },
@@ -735,6 +748,7 @@ const BGS = [
   { id: 'cristalbg', name: 'Cristal', at: 0 },
   { id: 'volcan', name: 'Volcán y mar', at: 0 },
   { id: 'ciudad', name: 'Ciudad', at: 0 },
+  { id: 'espacio', name: 'Espacio', at: 0 },
 ];
 let LOOK = { pal: 'uva', set: 'mimo', board: 'fresa', bg: 'puntitos' };
 const byId = (arr, id) => arr.find(x => x.id === id) || arr[0];
@@ -899,6 +913,59 @@ function carSVG(t, F, S, D) {
   if (c.crown) a += crown2(c.crown[0], c.crown[1], t === 'k');
   return `<svg class="pc" viewBox="0 0 100 100" aria-hidden="true">${a}</svg>`;
 }
+/* espacio (2D) */
+const GLASS = '#BFE9FF', GOLDC = '#FFC94D', GOLDS = '#D9A21C';
+function spaceSVG(t, F, S, D) {
+  const st = `stroke="${S}" stroke-width="3" stroke-linejoin="round"`;
+  const base = `<rect x="19" y="79" width="62" height="13" rx="6.5" fill="${D}" ${st}/>`;
+  const spark = (x, y, r = 3) => `<path d="M${x} ${y - r} L${x + r * .3} ${y - r * .3} L${x + r} ${y} L${x + r * .3} ${y + r * .3} L${x} ${y + r} L${x - r * .3} ${y + r * .3} L${x - r} ${y} L${x - r * .3} ${y - r * .3}Z" fill="#FFE066" stroke="${GOLDS}" stroke-width="1"/>`;
+  let a = '';
+  switch (t) {
+    case 'p': // astronauta
+      a = `<rect x="34" y="56" width="32" height="26" rx="12" fill="${F}" ${st}/><rect x="28" y="58" width="10" height="18" rx="4" fill="${D}" ${st}/>
+        <rect x="44" y="64" width="12" height="8" rx="2" fill="${D}" stroke="${S}" stroke-width="2"/><circle cx="47" cy="68" r="1.4" fill="#FF6B8B"/><circle cx="53" cy="68" r="1.4" fill="#53C9A8"/>
+        <path d="M50 22 V14" stroke="${S}" stroke-width="2.6"/><circle cx="50" cy="12" r="3.4" fill="#FF6B8B" stroke="${S}" stroke-width="1.8"/>
+        <circle cx="50" cy="40" r="19" fill="${F}" ${st}/><circle cx="50" cy="41" r="13.5" fill="${GLASS}" stroke="${S}" stroke-width="2.4"/>
+        <path d="M41 36 Q43 31 48 30" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>${miniFace(50, 43)}`;
+      break;
+    case 'n': // cohete
+      a = `<path d="M43 66 Q50 92 57 66Z" fill="#FF9A3C" stroke="#E0602A" stroke-width="2"/><path d="M46 66 Q50 82 54 66Z" fill="#FFE066"/>
+        <path d="M37 50 L25 70 L38 66Z M63 50 L75 70 L62 66Z" fill="${D}" ${st}/>
+        <path d="M50 6 Q66 20 65 46 L64 68 L36 68 L35 46 Q34 20 50 6Z" fill="${F}" ${st}/>
+        <path d="M43 15 Q50 8 57 15 Z" fill="${D}" stroke="${S}" stroke-width="2"/><path d="M50 68 L50 74" stroke="${S}" stroke-width="3"/>
+        <circle cx="50" cy="38" r="10" fill="${GLASS}" stroke="${D}" stroke-width="4"/>${miniFace(50, 39)}`;
+      break;
+    case 'b': // platillo volador
+      a = `<path d="M40 58 L30 79 L70 79 L60 58Z" fill="#FFE066" opacity=".45"/>
+        <path d="M33 47 Q33 24 50 24 Q67 24 67 47Z" fill="${GLASS}" stroke="${S}" stroke-width="2.6"/>
+        <path d="M44 30 L41 23 M56 30 L59 23" stroke="#3E9A52" stroke-width="2"/><circle cx="41" cy="22" r="2.2" fill="#9BE07A"/><circle cx="59" cy="22" r="2.2" fill="#9BE07A"/>
+        <circle cx="50" cy="40" r="10" fill="#9BE07A" stroke="#3E9A52" stroke-width="2"/><ellipse cx="46" cy="39" rx="2.2" ry="3" fill="#2B1D3A"/><ellipse cx="54" cy="39" rx="2.2" ry="3" fill="#2B1D3A"/><path d="M47.5 44 Q50 46 52.5 44" stroke="#2B1D3A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M37 32 Q40 27 45 27" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".9"/>
+        <ellipse cx="50" cy="51" rx="31" ry="10" fill="${F}" ${st}/><ellipse cx="50" cy="48" rx="20" ry="4" fill="${D}" opacity=".7"/>
+        ${[26, 38, 50, 62, 74].map(x => `<circle cx="${x}" cy="${x === 50 ? 56 : x === 38 || x === 62 ? 55 : 52}" r="2.6" fill="${GOLDC}" stroke="${GOLDS}" stroke-width="1"/>`).join('')}`;
+      break;
+    case 'r': // planeta con anillos
+      a = `<path d="M50 70 V79" stroke="${S}" stroke-width="4"/>
+        <path d="M17 52 Q20 40 50 38" fill="none" stroke="${D}" stroke-width="7" stroke-linecap="round" transform="rotate(-12 50 46)"/>
+        <circle cx="50" cy="46" r="21" fill="${F}" ${st}/><path d="M31 40 Q50 46 69 40 M30 52 Q50 58 70 52" stroke="${D}" stroke-width="3" fill="none" opacity=".7"/>
+        <path d="M50 54 Q80 52 83 40" fill="none" stroke="${D}" stroke-width="7" stroke-linecap="round" transform="rotate(-12 50 46)"/>
+        <path d="M50 54 Q80 52 83 40 M17 52 Q20 40 50 38" fill="none" stroke="${S}" stroke-width="1.5" transform="rotate(-12 50 46)"/>
+        ${miniFace(50, 46)}${spark(80, 20)}${spark(20, 70, 2.4)}`;
+      break;
+    case 'q': // luna
+      a = `<path d="M50 64 V79" stroke="${S}" stroke-width="4"/>
+        <path d="M62 19 A27 27 0 1 0 62 71 A36 36 0 0 1 62 19Z" fill="${F}" ${st}/>
+        <circle cx="36" cy="34" r="3" fill="${D}" opacity=".6"/><circle cx="32" cy="58" r="2.4" fill="${D}" opacity=".6"/>
+        ${miniFace(40, 46)}${crown2(48, 7)}${spark(74, 34)}${spark(78, 58, 2.4)}`;
+      break;
+    case 'k': // sol
+      a = `<path d="M50 70 V79" stroke="${S}" stroke-width="4"/>
+        ${Array.from({ length: 12 }, (_, k) => `<path d="M50 14 L54 24 L46 24Z" fill="${GOLDC}" stroke="${GOLDS}" stroke-width="1.6" stroke-linejoin="round" transform="rotate(${k * 30} 50 46)"/>`).join('')}
+        <circle cx="50" cy="46" r="20" fill="${F}" ${st}/>${face(50, 46, false)}${crown2(50, 4, true)}`;
+      break;
+  }
+  return `<svg class="pc" viewBox="0 0 100 100" aria-hidden="true">${base}${a}</svg>`;
+}
 function pieceSVG(p, look) {
   const L = look || LOOK;
   const w = p === p.toUpperCase(), t = p.toLowerCase();
@@ -908,6 +975,7 @@ function pieceSVG(p, look) {
   if (set === 'jardin') return gardenSVG(t, F, S, D);
   if (set === 'elementos') return elemSVG(t, w);
   if (set === 'carros') return carSVG(t, F, S, D);
+  if (set === 'espacio') return spaceSVG(t, F, S, D);
   const glass = set === 'cristal';
   let FILL = F, BASE = D, defs = '', shine = '';
   if (glass) {
@@ -1279,6 +1347,11 @@ const MUSIC = (() => {
     { rec: 'music/chopin-nocturno-9-1.mp3', name: 'Nocturno Op. 9 n.º 1', by: 'Chopin' },
     { rec: 'music/beethoven-claro-de-luna-3.mp3', name: 'Claro de luna (final)', by: 'Beethoven · toca Philip Addison Jones (CC)' },
     { rec: 'music/pieza-113.mp3', name: 'Pieza sorpresa', by: 'Clásica' },
+    { rec: 'music/chaikovski-mirlitones.mp3', name: 'Danza de los mirlitones', by: 'Chaikovski' },
+    { rec: 'music/pachelbel-canon-giga.mp3', name: 'Canon y Giga en Re', by: 'Pachelbel · Chamber Music Society of Lincoln Center (CC)', g: 0.83 },
+    { rec: 'music/chaikovski-danza-china.mp3', name: 'Danza china', by: 'Chaikovski' },
+    { rec: 'music/chaikovski-galope.mp3', name: 'Galope de los niños', by: 'Chaikovski' },
+    { rec: 'music/chaikovski-danza-rusa.mp3', name: 'Danza rusa (Trepak)', by: 'Chaikovski' },
   ];
   const PLAY = REC.concat(SONGS);
   let chain = null, timer = 0, cur = null, spb = 0.5, startT = 0, evI = 0, playing = false, onChange = () => {};
@@ -1311,6 +1384,8 @@ const MUSIC = (() => {
     if (S.rec) {
       cur = null;
       const a = audioEl();
+      const tg = vol * 0.92 * (S.g || 1);
+      try { if (recGain) recGain.gain.setValueAtTime(tg, AC.currentTime); else a.volume = Math.min(1, tg); } catch (e) {}
       if (!a.src || !a.src.endsWith(S.rec)) a.src = S.rec;
       a.currentTime = 0;
       const pr = a.play();
@@ -1364,7 +1439,8 @@ const MUSIC = (() => {
   function setVolume(v) {
     vol = Math.max(0, Math.min(1, v)); P.vol = vol;
     try {
-      if (recGain) recGain.gain.setTargetAtTime(vol * 0.92, AC.currentTime, 0.05); else if (el) el.volume = Math.min(1, vol * 0.92);
+      const gg = vol * 0.92 * (PLAY[idx].g || 1);
+      if (recGain) recGain.gain.setTargetAtTime(gg, AC.currentTime, 0.05); else if (el) el.volume = Math.min(1, gg);
       if (chain) chain.master.gain.setTargetAtTime(vol, AC.currentTime, 0.05);
     } catch (e) {}
   }
@@ -1948,6 +2024,84 @@ const GL = (() => {
     g.position.y = 0;
     return body;
   }
+  /* ---- espacio (3D) ---- */
+  const RT = -0.38; // inclinación del anillo del planeta
+  function space3D(g, t, pal, w, gold, gem, F, S, Dm) {
+    const glass = MAT.helmet || (MAT.helmet = new T.MeshPhysicalMaterial({ color: col('#CFEFFF'), transparent: true, opacity: 0.35, roughness: 0.03, clearcoat: 1, envMapIntensity: 2, depthWrite: false }));
+    const stand = h => add(g, cyl(0.025, 0.035, h, 10), S, 0, 0.15 + h / 2, 0);
+    const fl = g.userData.fl = [];
+    const flameO = MAT.fireO || (MAT.fireO = new T.MeshStandardMaterial({ color: col('#FF7A3C'), emissive: col('#FF5A1F'), emissiveIntensity: 0.85, roughness: 0.6, transparent: true, opacity: 0.92 }));
+    const flameI = MAT.fireI || (MAT.fireI = new T.MeshBasicMaterial({ color: col('#FFD54A') }));
+    const glowGold = mat('#FFC94D', 0.25, { emissive: col('#FFB800'), emissiveIntensity: 0.45 });
+    switch (t) {
+      case 'p': { // astronauta
+        add(g, cyl(0.17, 0.19, 0.28, 20), F, 0, 0.32, 0);
+        add(g, sphere(0.18), F, 0, 0.44, 0, 1, 0.6, 1);
+        add(g, box(0.22, 0.26, 0.12), Dm, 0, 0.36, -0.18);
+        add(g, box(0.12, 0.08, 0.03), Dm, 0, 0.34, 0.18);
+        add(g, sphere(0.018), mat('#FF6B8B', 0.3, { emissive: col('#FF6B8B'), emissiveIntensity: 0.6 }), -0.03, 0.34, 0.2);
+        add(g, sphere(0.018), mat('#53C9A8', 0.3, { emissive: col('#53C9A8'), emissiveIntensity: 0.6 }), 0.03, 0.34, 0.2);
+        add(g, geo('collarA', () => new T.TorusGeometry(0.15, 0.04, 10, 24)), Dm, 0, 0.5, 0).rotation.x = Math.PI / 2;
+        add(g, sphere(0.18), mat('#FFE3CC', 0.6), 0, 0.71, 0);
+        face(g, 0.72, 0.19, 'mimo');
+        add(g, sphere(0.26), glass, 0, 0.72, 0);
+        add(g, cyl(0.012, 0.012, 0.14, 6), S, 0.12, 1.0, 0);
+        add(g, sphere(0.035), mat('#FF6B8B', 0.3, { emissive: col('#FF6B8B'), emissiveIntensity: 0.6 }), 0.12, 1.08, 0);
+        break;
+      }
+      case 'n': { // cohete
+        add(g, lathe('rocket', [[0, .32], [.17, .32], [.21, .42], [.22, .62], [.2, .8], [.14, .97], [.06, 1.08], [0, 1.12]]), F);
+        add(g, lathe('rnose', [[0, .96], [.13, .96], [.1, 1.02], [.05, 1.09], [0, 1.13]]), Dm);
+        for (let k = 0; k < 3; k++) { const a = k / 3 * Math.PI * 2 - Math.PI / 2; const fin = add(g, box(0.03, 0.22, 0.16), Dm, Math.cos(a) * 0.22, 0.4, Math.sin(a) * 0.22); fin.rotation.y = -a; }
+        add(g, geo('rwin', () => new T.TorusGeometry(0.1, 0.03, 10, 24)), Dm, 0, 0.7, 0.2);
+        add(g, cyl(0.1, 0.1, 0.02, 20), mat('#BFE9FF', 0.05, { envMapIntensity: 1.6 }), 0, 0.7, 0.2).rotation.x = Math.PI / 2;
+        const fg = new T.Group(); fg.position.set(0, 0, -0.02); g.add(fg); face(fg, 0.7, 0.24, 'mimo');
+        const o = add(g, lathe('flame', [[0, 0], [.3, .04], [.42, .18], [.42, .34], [.33, .52], [.2, .72], [.07, .9], [0, 1]]), flameO, 0, 0.32, 0, 0.32, -0.22, 0.32);
+        const i = add(g, lathe('flame', [[0, 0], [.3, .04], [.42, .18], [.42, .34], [.33, .52], [.2, .72], [.07, .9], [0, 1]]), flameI, 0, 0.32, 0, 0.18, -0.15, 0.18);
+        [o, i].forEach((m, k) => { m.userData.h = m.scale.y; m.userData.ph = k * 2; fl.push(m); });
+        g.userData.hover = true;
+        break;
+      }
+      case 'b': { // platillo volador
+        add(g, cone(0.3, 0.42), MAT.beam || (MAT.beam = new T.MeshBasicMaterial({ color: col('#FFE066'), transparent: true, opacity: 0.25, depthWrite: false })), 0, 0.36, 0);
+        add(g, lathe('ufo', [[0, .52], [.3, .53], [.45, .58], [.46, .62], [.3, .68], [0, .7]]), F);
+        add(g, geo('ufoband', () => new T.TorusGeometry(0.42, 0.025, 8, 36)), Dm, 0, 0.61, 0).rotation.x = Math.PI / 2;
+        for (let k = 0; k < 8; k++) { const a = k / 8 * Math.PI * 2; add(g, sphere(0.032), glowGold, Math.cos(a) * 0.4, 0.6, Math.sin(a) * 0.4); }
+        add(g, sphere(0.13), mat('#9BE07A', 0.5), 0, 0.8, 0);
+        for (const s of [-1, 1]) { add(g, cyl(0.01, 0.01, 0.1, 5), mat('#3E9A52', 0.5), s * 0.06, 0.95, 0).rotation.z = -s * 0.4; add(g, sphere(0.022), mat('#9BE07A', 0.5), s * 0.085, 1.0, 0); }
+        const fg = new T.Group(); g.add(fg); face(fg, 0.8, 0.14, 'mimo');
+        add(g, sphere(0.22), glass, 0, 0.74, 0, 1, 0.9, 1);
+        g.userData.hover = true;
+        break;
+      }
+      case 'r': { // planeta con anillos
+        stand(0.3);
+        add(g, sphere(0.27), F, 0, 0.72, 0);
+        add(g, geo('pband', () => new T.TorusGeometry(0.262, 0.018, 8, 36)), Dm, 0, 0.78, 0).rotation.x = Math.PI / 2;
+        add(g, geo('pband2', () => new T.TorusGeometry(0.255, 0.018, 8, 36)), Dm, 0, 0.64, 0).rotation.x = Math.PI / 2;
+        const ring = add(g, geo('pring', () => new T.TorusGeometry(0.43, 0.04, 6, 48)), mat(pal[2], 0.35, { envMapIntensity: 1.2 }), 0, 0.72, 0, 1, 1, 0.32);
+        ring.rotation.set(Math.PI / 2 + RT, 0, 0.3);
+        face(g, 0.72, 0.27, 'mimo');
+        break;
+      }
+      case 'q': { // luna
+        stand(0.26);
+        const moon = add(g, geo('moon', () => new T.TorusGeometry(0.25, 0.11, 16, 40, Math.PI * 1.15)), F, -0.02, 0.72, 0);
+        moon.rotation.z = Math.PI / 2 + 0.43;
+        const fg = new T.Group(); fg.position.set(-0.24, 0, 0); g.add(fg); face(fg, 0.72, 0.13, 'mimo');
+        crownAt(g, 'q', gold, -0.12, 1.0, 0, 0.6, gem);
+        break;
+      }
+      case 'k': { // sol
+        stand(0.26);
+        add(g, sphere(0.26), F, 0, 0.72, 0);
+        for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2; const r = add(g, cone(0.06, 0.13), glowGold, Math.cos(a) * 0.35, 0.72 + Math.sin(a) * 0.35, -0.02); r.rotation.z = a - Math.PI / 2; }
+        face(g, 0.72, 0.26, 'mimo');
+        crownAt(g, 'k', gold, 0, 1.1, 0, 0.75, gem);
+        break;
+      }
+    }
+  }
   function build(ch, look) {
     const w = ch === ch.toUpperCase(), t = ch.toLowerCase();
     const pal = byId(PALETTES, look.pal)[w ? 'w' : 'b'];
@@ -1968,6 +2122,7 @@ const GL = (() => {
     else if (set === 'jardin') garden3D(g, t, pal, w, gold, gem);
     else if (set === 'elementos') elem3D(g, t, w, gold, gem);
     else if (set === 'carros') car3D(g, t, pal, w, gold, gem);
+    else if (set === 'espacio') space3D(g, t, pal, w, gold, gem, F, S, Dm);
     else switch (t) {
       case 'p':
         add(g, lathe('pb2', [[0, .15], [.3, .15], [.29, .18], [.25, .23], [.2, .31], [.16, .41], [.145, .48], [.15, .52], [0, .53]]), F);
@@ -2080,7 +2235,7 @@ const GL = (() => {
       boardG.add(m); tiles.push(m);
       if (!lt && LOOK.board === 'carretera') { const ln = new T.Mesh(box(0.08, 0.02, 0.32), mat('#FFFFFF', 0.5)); ln.position.set((c - 3.5) * SQ, 0.13, (r - 3.5) * SQ); boardG.add(ln); }
       if (!lt && LOOK.board === 'pasto') [[-0.25, -0.2], [0.22, 0.15], [-0.05, 0.3]].forEach(([dx, dz]) => { const b2 = new T.Mesh(cone(0.04, 0.1), mat('#5DB86A', 0.6)); b2.position.set((c - 3.5 + dx) * SQ, 0.17, (r - 3.5 + dz) * SQ); boardG.add(b2); });
-      if (!lt && (LOOK.board === 'galleta' || LOOK.board === 'noche')) {
+      if (!lt && (LOOK.board === 'galleta' || LOOK.board === 'noche' || LOOK.board === 'espacio')) {
         const dot = LOOK.board === 'galleta' ? mat('#7A4A2A', 0.8) : mat('#FFF1C9', 0.4, { emissive: col('#FFF1C9'), emissiveIntensity: 0.6 });
         [[-0.22, -0.2], [0.2, 0.12], [-0.08, 0.28]].forEach(([dx, dz], k) => {
           const d = new T.Mesh(cyl(LOOK.board === 'galleta' ? 0.07 : 0.035, LOOK.board === 'galleta' ? 0.07 : 0.035, 0.03, 10), dot);
@@ -2097,10 +2252,26 @@ const GL = (() => {
     while (pieceG.children.length) pieceG.remove(pieceG.children[0]);
     meshes = new Array(64).fill(null); prevB = new Array(64).fill(null);
   }
+  let stars = null;
+  function starfield(on) {
+    if (stars) { scene.remove(stars); stars = null; }
+    if (!on) return;
+    const n = 2200, p = new Float32Array(n * 3), c = new Float32Array(n * 3);
+    let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const tints = [[1, 1, 1], [0.8, 0.88, 1], [1, 0.93, 0.82], [0.9, 0.8, 1]];
+    for (let i = 0; i < n; i++) {
+      const u = rnd() * 2 - 1, a = rnd() * Math.PI * 2, r = 30 + rnd() * 18, q = Math.sqrt(1 - u * u);
+      p[i * 3] = Math.cos(a) * q * r; p[i * 3 + 1] = Math.abs(u) * r * 0.9 - 4; p[i * 3 + 2] = Math.sin(a) * q * r;
+      const tt = tints[(rnd() * 4) | 0], b = 0.45 + rnd() * 0.55; c[i * 3] = tt[0] * b; c[i * 3 + 1] = tt[1] * b; c[i * 3 + 2] = tt[2] * b;
+    }
+    const gm = new T.BufferGeometry(); gm.setAttribute('position', new T.BufferAttribute(p, 3)); gm.setAttribute('color', new T.BufferAttribute(c, 3));
+    stars = new T.Points(gm, new T.PointsMaterial({ size: 0.16, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0.95, depthWrite: false }));
+    scene.add(stars);
+  }
   function ensureLook() {
-    const k = LOOK.pal + LOOK.set + LOOK.board;
+    const k = LOOK.pal + LOOK.set + LOOK.board + LOOK.bg;
     if (k === lookKey) return;
-    lookKey = k; buildBoard(); clearPieces();
+    lookKey = k; buildBoard(); clearPieces(); starfield(LOOK.bg === 'espacio');
   }
   function place(ch, i) {
     const g = build(ch, LOOK);
@@ -2322,7 +2493,7 @@ const GL = (() => {
       if (g.userData.fl) g.userData.fl.forEach(m => { const f = Math.sin(t * 9 + m.userData.ph) * 0.07 + Math.sin(t * 13.7 + m.userData.ph * 2) * 0.04; m.scale.y = m.userData.h * (1 + f); m.rotation.y = f * 2; });
       if (g.userData.tw) g.userData.tw.forEach(m => { const v = 0.3 + 0.9 * Math.max(0, Math.sin(t * 2.4 + m.userData.twinkle)); m.scale.set(v, v * 1.8, v); });
       if (G && G.sel === i) { g.position.y = 0.32 + Math.sin(t * 6) * 0.06; g.scale.setScalar(K); return; }
-      g.position.y = 0.12;
+      g.position.y = 0.12 + (g.userData.hover ? Math.sin(t * 2.2 + g.userData.phase) * 0.05 + 0.04 : 0);
       const mine = idleOk && (E.isW(g.userData.ch) ? 'w' : 'b') === turn;
       const b = mine ? Math.sin(t * 2.6 + g.userData.phase) * 0.03 : 0;
       g.scale.set(K * (1 - b * 0.5), K * (1 + b), K * (1 - b * 0.5));
@@ -2672,9 +2843,56 @@ function winModal(o) {
 
 
 /* ---------- mi estilo ---------- */
+let SPACE_URL = null;
+function spaceBG() {
+  if (SPACE_URL) return SPACE_URL;
+  const W = 900, H = 1600, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const x = cv.getContext('2d');
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const bg = x.createLinearGradient(0, 0, W * 0.4, H); bg.addColorStop(0, '#06071a'); bg.addColorStop(0.5, '#0c1132'); bg.addColorStop(1, '#130826');
+  x.fillStyle = bg; x.fillRect(0, 0, W, H);
+  x.globalCompositeOperation = 'lighter';
+  const neb = (cx, cy, r, rgb, n, k = 1) => {
+    for (let i = 0; i < n; i++) {
+      const a = rnd() * 6.283, d = Math.pow(rnd(), 0.7) * r, px = cx + Math.cos(a) * d * 1.3, py = cy + Math.sin(a) * d * 0.8, rr = r * (0.12 + rnd() * 0.38);
+      const g = x.createRadialGradient(px, py, 0, px, py, rr);
+      g.addColorStop(0, `rgba(${rgb},${((0.035 + rnd() * 0.05) * k).toFixed(3)})`); g.addColorStop(1, `rgba(${rgb},0)`);
+      x.fillStyle = g; x.fillRect(px - rr, py - rr, rr * 2, rr * 2);
+    }
+  };
+  neb(260, 430, 340, '186,64,150', 70); neb(330, 470, 200, '255,120,150', 30, 0.8); neb(640, 820, 380, '64,96,230', 80);
+  neb(560, 760, 180, '120,170,255', 30, 0.9); neb(360, 1200, 320, '40,180,200', 60); neb(720, 300, 220, '255,150,90', 30, 0.7);
+  for (let i = 0; i < 2800; i++) {
+    const px = rnd() * W, py = rnd() * H, big = rnd() > 0.975, r = big ? 1 + rnd() * 1.4 : 0.25 + rnd() * 0.9;
+    const t = rnd(), col = t < 0.6 ? '255,255,255' : t < 0.8 ? '200,220,255' : t < 0.93 ? '255,236,205' : '255,200,220';
+    x.fillStyle = `rgba(${col},${(0.35 + rnd() * 0.65).toFixed(2)})`; x.beginPath(); x.arc(px, py, r, 0, 6.283); x.fill();
+  }
+  for (let i = 0; i < 26; i++) {
+    const px = rnd() * W, py = rnd() * H, r = 8 + rnd() * 22, col = rnd() < 0.5 ? '210,225,255' : '255,240,220';
+    const g = x.createRadialGradient(px, py, 0, px, py, r); g.addColorStop(0, `rgba(${col},.95)`); g.addColorStop(0.15, `rgba(${col},.35)`); g.addColorStop(1, `rgba(${col},0)`);
+    x.fillStyle = g; x.fillRect(px - r, py - r, r * 2, r * 2);
+    const L = r * (1.6 + rnd() * 1.6); x.strokeStyle = `rgba(${col},.45)`; x.lineWidth = 1;
+    x.beginPath(); x.moveTo(px - L, py); x.lineTo(px + L, py); x.moveTo(px, py - L); x.lineTo(px, py + L); x.stroke();
+  }
+  x.globalCompositeOperation = 'source-over';
+  const pl = (cx, cy, r, c1, c2, rim) => {
+    const g = x.createRadialGradient(cx + r * 0.35, cy - r * 0.35, r * 0.1, cx, cy, r);
+    g.addColorStop(0, c1); g.addColorStop(1, c2); x.fillStyle = g; x.beginPath(); x.arc(cx, cy, r, 0, 6.283); x.fill();
+    const a = x.createRadialGradient(cx, cy, r * 0.96, cx, cy, r * 1.12); a.addColorStop(0, `rgba(${rim},.55)`); a.addColorStop(1, `rgba(${rim},0)`);
+    x.fillStyle = a; x.beginPath(); x.arc(cx, cy, r * 1.12, 0, 6.283); x.fill();
+  };
+  pl(-60, 1500, 380, '#4b63c9', '#0d1236', '120,170,255');
+  x.globalAlpha = 0.18; x.fillStyle = '#ffffff';
+  for (let k = 0; k < 6; k++) { x.beginPath(); x.ellipse(-60, 1500 - 120 + k * 50, 380 * Math.sqrt(1 - Math.pow((-120 + k * 50) / 380, 2)), 8, 0, 0, 6.283); x.fill(); }
+  x.globalAlpha = 1;
+  pl(860, 1020, 54, '#d9cfe8', '#4a4268', '220,210,255');
+  SPACE_URL = cv.toDataURL('image/jpeg', 0.88);
+  return SPACE_URL;
+}
 function applyLook() {
   document.body.setAttribute('data-board', LOOK.board);
   document.body.setAttribute('data-bg', LOOK.bg);
+  document.body.style.backgroundImage = LOOK.bg === 'espacio' ? `url(${spaceBG()})` : '';
   GL.refresh();
 }
 function renderStyle() {

@@ -7,7 +7,8 @@ Ajedrez tierno para niños. Aprenden a mover cada pieza, resuelven retos de jaqu
 ## Qué incluye
 
 - **Aprender:** 6 lecciones (una por pieza), 5 retos de mate en 1 y 6 jugadas buenas con explicación para practicar (buen comienzo, pieza sin cuidar, tenedor, clavada, doble ataque de peón y mate de la escalera).
-- **Clases:** escuela de ajedrez de 16 clases en 4 niveles por edad (Explorador 6-7, Aprendiz 7-8, Estratega 8-9 y Campeón 9-10 años). Cada clase tiene una explicación con tableritos, leída en voz alta, y ejercicios para practicar. Se abren en orden dentro de cada nivel.
+- **Clases:** escuela de ajedrez de 30 clases en 5 niveles por edad (Explorador 6-7, Aprendiz 7-8, Estratega 8-9, Campeón 9-10 y Maestro 10+ años): reglas y buenos modales, tablero, valor de las piezas, jaque, mate, ahogado y tablas, enroque, coronación y al paso, notación, aperturas, mates famosos, tácticas (ataques dobles, clavadas, pinchos, descubiertas, sacrificios), finales (regla del cuadrado, oposición, torres) y estrategia (peones pasados, columnas abiertas, piezas activas). Cada clase tiene una explicación con tableritos, leída en voz alta, y ejercicios para practicar.
+- **Perfiles de jugador:** cada niño entra con su nombre y su pieza favorita y guarda sus propias estrellas, clases y estilo.
 - **Aventura:** la historia de la Corona de Estrellas, 12 capítulos con dificultad creciente.
 - **Dos jugadores** en el mismo celular o tableta.
 - **Mi estilo:** 6 parejas de colores, 15 diseños de piezas (Mimitos, Selva, Cristal, Jardín, Fuego y agua, Carritos, Espacio, Caricatura, Ébano y marfil, Elegantes, Gatitos, Dulces, Robots, Clásicas), 19 tableros (4 con fotos del espacio) y 15 fondos (incluye un fondo espacial generado y 4 fotos reales del espacio).

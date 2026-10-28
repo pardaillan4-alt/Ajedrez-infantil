@@ -405,6 +405,9 @@ body[data-photo] .sqr .rk,body[data-photo] .sqr .fl{color:#fff;opacity:.9}
   <p class="section-title">2 · Jaque mate en 1</p>
   <p class="hint-text">Encuentra la jugada que atrapa al rey para siempre.</p>
   <div class="grid3" id="puzzles"></div>
+  <p class="section-title">3 · Jugadas buenas</p>
+  <p class="hint-text">Aprende trucos de campeón con su explicación y practícalos tú.</p>
+  <div class="grid3" id="jugadas"></div>
 </section>
 
 <section class="screen" id="s-adv" hidden>
@@ -1241,7 +1244,7 @@ if (!P.advV) {
 if (P.view3d === undefined) P.view3d = true;
 if (P.look) LOOK = Object.assign(LOOK, P.look);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) {} };
-const totalStars = () => Object.values(P.adv).reduce((a, b) => a + b, 0) + Object.keys(P.les).length + Object.keys(P.puz).length;
+const totalStars = () => Object.values(P.adv).reduce((a, b) => a + b, 0) + Object.keys(P.les).length + Object.keys(P.puz).length + Object.keys(P.jug || {}).length;
 
 /* ---------- sound ---------- */
 let AC = null;
@@ -1573,6 +1576,8 @@ function renderHome() {
 function renderLearn() {
   $('lessons').innerHTML = LESSONS.map((l, i) => `<button class="tile" data-l="${i}">${P.les[l.id] ? checkSVG : ''}${pieceSVG(l.p)}<b>${cap(NAMES[l.p.toLowerCase()])}</b><small>${l.sub}</small></button>`).join('');
   $('puzzles').innerHTML = PUZZLES.map((z, i) => `<button class="tile puz" data-z="${i}">${P.puz[i] ? checkSVG : ''}<span class="num">${i + 1}</span><b>Reto ${i + 1}</b><small>Mate en 1</small></button>`).join('');
+  $('jugadas').innerHTML = JUGADAS.map((j, i) => `<button class="tile puz" data-j="${i}">${P.jug[j.id] ? checkSVG : ''}<span class="num">${i + 1}</span><b>${j.name}</b><small>${j.sub}</small></button>`).join('');
+  $('jugadas').querySelectorAll('[data-j]').forEach(b => b.onclick = () => { sfx.tap(); startJugada(+b.dataset.j); });
   $('lessons').querySelectorAll('[data-l]').forEach(b => b.onclick = () => { sfx.tap(); startLesson(+b.dataset.l); });
   $('puzzles').querySelectorAll('[data-z]').forEach(b => b.onclick = () => { sfx.tap(); startPuzzle(+b.dataset.z); });
 }
@@ -1714,7 +1719,7 @@ function showCat() {
   el.innerHTML = `<span class="ci">${DOVE}</span><span><small>${f.src}</small><span class="ct">${f.t}</span></span>`;
   el.hidden = false;
   el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
-  if (P.catVoice !== false) VOICE.say(f.say);
+  if (P.catVoice !== false && !(G && G.mode === 'jug')) VOICE.say(f.say);
   armCat();
 }
 $('g-cat').onclick = () => { sfx.tap(); showCat(); };
@@ -1738,7 +1743,7 @@ function baseGame(mode, s, title) {
   $('a-hint').innerHTML = icon('bulb') + 'Pista';
   $('a-undo').innerHTML = icon('undo') + 'Deshacer';
   $('a-reset').innerHTML = icon('reset') + 'Empezar';
-  $('a-undo').disabled = mode === 'puzzle';
+  $('a-undo').disabled = mode === 'puzzle' || mode === 'jug';
   renderSound();
   show('game');
   showCat();
@@ -1791,7 +1796,7 @@ function canMove() {
 
 function render() {
   const s = G.s;
-  const kIdx = (G.mode === 'ai' || G.mode === 'duo' || G.mode === 'puzzle') && E.inCheck(s, s.turn) ? s.b.indexOf(s.turn === 'w' ? 'K' : 'k') : -1;
+  const kIdx = (G.mode === 'ai' || G.mode === 'duo' || G.mode === 'puzzle' || G.mode === 'jug') && E.inCheck(s, s.turn) ? s.b.indexOf(s.turn === 'w' ? 'K' : 'k') : -1;
   const tos = new Map(G.moves.map(m => [m.to, m]));
   let h = '';
   for (let i = 0; i < 64; i++) {
@@ -1823,7 +1828,7 @@ function render() {
     $('g-turns').innerHTML = `<div class="side ${on === 'w' ? 'on' : ''}">${pieceSVG('K')}<span><b>${TN('w')}</b><small>${on === 'w' ? '¡Te toca!' : 'Espera'}</small></span></div>
       <div class="side ${on === 'b' ? 'on' : ''}">${pieceSVG('k')}<span><b>${TN('b')}</b><small>${on === 'b' ? '¡Te toca!' : 'Espera'}</small></span></div>`;
   }
-  $('a-undo').disabled = G.mode === 'puzzle' || !G.hist.length || G.over;
+  $('a-undo').disabled = G.mode === 'puzzle' || G.mode === 'jug' || !G.hist.length || G.over;
   $('a-hint').disabled = G.over;
   if (P.view3d && GL.ok) GL.sync();
 }
@@ -2635,7 +2640,7 @@ const GL = (() => {
     if (G.last) { overlay(G.last.from, '#FFC94D', 0.4); overlay(G.last.to, '#FFC94D', 0.5); }
     if (G.sel >= 0) overlay(G.sel, '#53C9A8', 0.6);
     if (G.hint) G.hint.forEach(i => overlay(i, '#FFC94D', 0.7, true));
-    if ((G.mode === 'ai' || G.mode === 'duo' || G.mode === 'puzzle') && E.inCheck(s, s.turn)) {
+    if ((G.mode === 'ai' || G.mode === 'duo' || G.mode === 'puzzle' || G.mode === 'jug') && E.inCheck(s, s.turn)) {
       const k = s.b.indexOf(s.turn === 'w' ? 'K' : 'k'); if (k >= 0) overlay(k, '#FF4D79', 0.7, true);
     }
     const mint = mat('#53C9A8', 0.4, { emissive: col('#53C9A8'), emissiveIntensity: 0.35 });
@@ -2824,7 +2829,7 @@ $('g-view').onclick = toggleView; $('view-home').onclick = toggleView;
 applyView();
 
 function renderTrays() {
-  if (G.mode === 'lesson' || G.mode === 'puzzle') { $('tray-top').innerHTML = ''; $('tray-bot').innerHTML = ''; return; }
+  if (G.mode === 'lesson' || G.mode === 'puzzle' || G.mode === 'jug') { $('tray-top').innerHTML = ''; $('tray-bot').innerHTML = ''; return; }
   const full = { p: 8, n: 2, b: 2, r: 2, q: 1 };
   const missing = white => {
     const out = [];
@@ -2916,6 +2921,7 @@ function playerMove(m) {
   applyMove(m);
   if (G.mode === 'lesson') return lessonStep(m);
   if (G.mode === 'puzzle') return puzzleStep(m);
+  if (G.mode === 'jug') return jugStep(m);
   const st = E.status(G.s);
   if (m.cap) {
     sfx.cap();
@@ -2956,6 +2962,123 @@ function aiTurn() {
       render();
     }, cfg.silly ? 250 : 120);
   }, 420);
+}
+
+/* ---------- jugadas buenas (lecciones de táctica y apertura) ---------- */
+// cada paso: ok = jugadas correctas ('mate' = cualquier jaque mate), reply = respuesta del rival,
+// ask = qué pedir, good = explicación al acertar, bad = explicación de errores comunes
+const JUGADAS = [
+  { id: 'inicio', name: 'Buen comienzo', sub: 'Cómo empezar', fen: E.START,
+    intro: 'Al empezar una partida hay 3 reglas de oro: peones al centro, saca tus piezas y protege a tu rey. ¡Vamos a practicarlas!',
+    steps: [
+      { ask: 'Mueve dos casillas el peón que está frente a tu rey', ok: ['e2e4'], reply: 'e7e5',
+        good: '¡Muy bien! Los peones del centro dominan el tablero y abren camino a tu alfil y a tu dama.' },
+      { ask: 'Saca el caballo del lado del rey hacia el centro', ok: ['g1f3'], reply: 'b8c6',
+        good: '¡Eso! Cerca del centro el caballo llega a muchas casillas. Además ataca al peón negro. Recuerda: «caballo en la orilla, caballo en ruina».' },
+      { ask: 'Ahora saca el alfil del lado del rey', ok: ['f1c4', 'f1b5'], reply: 'f8c5',
+        good: '¡Perfecto! El alfil es de largo alcance: desde ahí apunta al centro y al lado del rey rival.',
+        bad: { f1e2: 'Esa casilla no está mal, pero el alfil queda tímido. Búscale un lugar donde mire más lejos.', f1d3: 'Ahí el alfil tapa a tu peón de d2. Búscale otra casilla.' } },
+      { ask: '¡Protege a tu rey! Haz el enroque: mueve el rey dos casillas hacia la torre', ok: ['e1g1'],
+        good: '¡Enroque! Tu rey quedó escondido detrás de sus peones y la torre ya puede salir a jugar.' },
+    ],
+    end: 'Ya conoces las 3 reglas de oro: peones al centro, saca caballos y alfiles, y enroca pronto. ¡Úsalas en cada partida!' },
+  { id: 'colgada', name: 'Pieza sin cuidar', sub: 'Atrapa gratis', fen: '4k3/8/1p6/2b1n3/8/3N4/8/4R2K w - - 0 1',
+    intro: 'Antes de cada jugada hazte una pregunta: ¿hay alguna pieza del otro equipo que nadie cuida? Si la hay, ¡atrápala!',
+    steps: [
+      { ask: 'Busca la pieza negra que nadie cuida y atrápala', ok: ['d3e5', 'e1e5'],
+        good: '¡Ñam! El caballo negro estaba solito y nadie lo podía defender. ¡Pieza gratis!',
+        bad: { d3c5: 'Cuidado: ese alfil está protegido por el peón de b6. Si lo atrapas, el peón atrapa a tu caballo. Busca una pieza que nadie cuide.' } },
+    ],
+    end: 'Una pieza sin cuidar es como un dulce que nadie vigila. Busca siempre las piezas solitas del otro equipo… ¡y cuida las tuyas!' },
+  { id: 'tenedor', name: 'El tenedor', sub: 'Ataque doble', fen: 'r3k3/8/8/3N4/8/8/8/4K3 w - - 0 1',
+    intro: 'Un tenedor es cuando una pieza ataca a dos piezas al mismo tiempo. El caballo es el campeón de los tenedores porque salta.',
+    steps: [
+      { ask: 'Salta con el caballo para atacar al rey y a la torre a la vez', ok: ['d5c7'], reply: 'e8e7',
+        good: '¡Tenedor! El caballo da jaque al rey y también ataca a la torre. El rey tiene que escapar…' },
+      { ask: 'El rey escapó. ¡Ahora atrapa la torre!', ok: ['c7a8'],
+        good: '¡Lo lograste! Atrapaste una torre gracias al tenedor.' },
+    ],
+    end: 'Busca casillas desde donde tu caballo ataque a dos piezas a la vez, sobre todo si una es el rey.' },
+  { id: 'clavada', name: 'La clavada', sub: 'Pieza atrapada', fen: '4k3/8/8/4q3/8/8/5K2/R7 w - - 0 1',
+    intro: 'Una clavada es cuando una pieza no se puede mover porque detrás de ella está su rey. ¡Se queda pegada como con clavo!',
+    steps: [
+      { ask: 'Pon tu torre en la misma columna que la dama y el rey negros', ok: ['a1e1'], reply: 'e5e1',
+        good: '¡Clavada! La dama negra no puede escapar porque dejaría a su rey en jaque. Por eso prefiere atrapar tu torre…' },
+      { ask: 'La dama atrapó tu torre y da jaque. ¡Atrápala con tu rey!', ok: ['f2e1'],
+        good: '¡Excelente! Cambiaste tu torre por la dama, que vale mucho más.' },
+    ],
+    end: 'Cuando el rey y otra pieza grande están en la misma línea, busca cómo clavarlas con tu torre, alfil o dama.' },
+  { id: 'peon', name: 'Peón valiente', sub: 'Doble ataque', fen: '4k3/8/8/2n1b3/8/2PP4/8/4K3 w - - 0 1',
+    intro: 'Hasta el peón, la pieza más pequeña, puede atacar a dos piezas grandes a la vez. ¡Y además está protegido!',
+    steps: [
+      { ask: 'Avanza un peón para atacar al caballo y al alfil al mismo tiempo', ok: ['d3d4'], reply: 'c5a4',
+        good: '¡Muy bien! El peón ataca a las dos piezas y está cuidado por el otro peón. Solo una puede escapar…',
+        bad: { c3c4: 'Ese peón no ataca a ninguna pieza. Busca el que puede atacar a las dos.' } },
+      { ask: 'El caballo escapó. ¡Atrapa al alfil con tu peón!', ok: ['d4e5'],
+        good: '¡Bravo! Un peoncito atrapó a un alfil. ¡Gran negocio!' },
+    ],
+    end: 'Los peones valen poco, así que cuando atacan a piezas grandes, ¡el otro equipo pierde mucho!' },
+  { id: 'escalera', name: 'La escalera', sub: 'Mate con torres', fen: '4k3/8/8/8/8/8/R7/1R4K1 w - - 0 1',
+    intro: 'Dos torres juntas dan jaque mate como subiendo una escalera: una cierra una fila y la otra da el jaque en la siguiente.',
+    steps: [
+      { ask: 'Usa una torre para cerrarle al rey la fila de abajo de él', ok: ['a2a7', 'b1b7'], reply: 'e8d8',
+        good: '¡Eso! Ahora el rey negro no puede bajar: la fila está cerrada por tu torre.' },
+      { ask: '¡Ahora da jaque mate con la otra torre!', ok: ['mate'],
+        good: '¡Jaque mate! Una torre cierra el camino y la otra da el jaque. ¡Subiste la escalera!' },
+    ],
+    end: 'Con dos torres puedes dar mate a un rey solito: ve empujándolo fila por fila hasta la orilla.' },
+];
+if (!P.jug) P.jug = {};
+const uciOf = m => E.name(m.from) + E.name(m.to);
+
+function startJugada(i) {
+  const j = JUGADAS[i];
+  baseGame('jug', E.parse(j.fen), j.name);
+  G.jug = i; G.step = 0;
+  bubble(j.intro, animalSVG('owl'));
+  sayLesson(j.intro);
+  setStatus(j.steps[0].ask);
+  render();
+}
+function sayLesson(t) { if (P.catVoice !== false) VOICE.say(t); }
+function jugStep(m) {
+  const j = JUGADAS[G.jug], st = j.steps[G.step], u = uciOf(m);
+  const right = st.ok.includes('mate') ? E.status(G.s) === 'mate' : st.ok.includes(u);
+  render();
+  if (!right) {
+    sfx.oops();
+    const why = st.bad && st.bad[u];
+    if (why) { bubble(why); sayLesson(why); }
+    setStatus(why ? 'Esa no es la mejor. ¡Prueba otra!' : 'Casi… esa no es. Lee la pista de arriba y prueba otra', true);
+    G.busy = true;
+    setTimeout(() => { const h = G.hist.pop(); G.s = h.s; G.last = h.last; G.busy = false; render(); }, 1000);
+    return;
+  }
+  m.cap ? sfx.cap() : sfx.move();
+  bubble(st.good); sayLesson(st.good);
+  G.step++;
+  if (G.step >= j.steps.length) {
+    const first = !P.jug[j.id];
+    P.jug[j.id] = 1; save(); G.over = true;
+    setStatus('¡Lo lograste!');
+    setTimeout(() => winModal({ title: '¡Aprendiste ' + (j.name.startsWith('La ') || j.name.startsWith('El ') ? j.name.toLowerCase() : 'algo nuevo') + '!', text: j.end, stars: 1, of: 1, av: animalSVG('owl'), fresh: first,
+      next: G.jug < JUGADAS.length - 1 ? (k => () => startJugada(k))(G.jug + 1) : () => show('learn'), nextLabel: G.jug < JUGADAS.length - 1 ? 'Siguiente jugada' : 'Volver a Aprender', again: (k => () => startJugada(k))(G.jug), back: 'learn' }), 2200);
+    return;
+  }
+  setStatus('¡Muy bien!');
+  if (st.reply) {
+    G.busy = true;
+    setTimeout(() => {
+      const r = E.legal(G.s).find(x => uciOf(x) === st.reply);
+      if (r) { applyMove(r); r.cap ? sfx.cap() : sfx.move(); }
+      G.busy = false; setStatus(j.steps[G.step].ask); render();
+    }, 1600);
+  } else setStatus(j.steps[G.step].ask);
+}
+function jugHint() {
+  const st = JUGADAS[G.jug].steps[G.step];
+  const m = st.ok.includes('mate') ? E.legal(G.s).find(x => E.status(E.make(G.s, x)) === 'mate') : E.legal(G.s).find(x => st.ok.includes(uciOf(x)));
+  if (m) { G.hint = [m.from, m.to]; setStatus('Mueve la pieza que brilla a la casilla que brilla'); render(); }
 }
 
 /* lessons */
@@ -3027,6 +3150,7 @@ $('a-hint').onclick = () => {
   if (!G || G.over || G.busy) return;
   sfx.tap();
   if (G.mode === 'lesson') { G.hint = lessonHint(); setStatus('Sigue la casilla que brilla'); render(); return; }
+  if (G.mode === 'jug') { jugHint(); return; }
   if (G.mode === 'puzzle') {
     const m = E.legal(G.s).find(x => E.status(E.make(G.s, x)) === 'mate');
     if (m) { G.hint = [m.from]; setStatus('Esta pieza es la que da el mate. ¿A dónde va?'); render(); }
@@ -3059,13 +3183,14 @@ $('a-reset').onclick = () => {
   if (G.mode === 'ai') startAI(G.level);
   else if (G.mode === 'duo') startDuo();
   else if (G.mode === 'lesson') startLesson(G.lesson);
+  else if (G.mode === 'jug') startJugada(G.jug);
   else startPuzzle(G.puzzle);
 };
 $('g-back').innerHTML = icon('back');
 $('g-back').onclick = () => {
   sfx.tap();
   const m = G && G.mode; G = null;
-  show(m === 'ai' ? 'adv' : m === 'lesson' || m === 'puzzle' ? 'learn' : 'home');
+  show(m === 'ai' ? 'adv' : m === 'lesson' || m === 'puzzle' || m === 'jug' ? 'learn' : 'home');
 };
 
 /* ---------- end of game ---------- */

@@ -356,6 +356,54 @@ body[data-board="caricatura"] .sqr .rk,body[data-board="caricatura"] .sqr .fl{co
 @media (prefers-reduced-motion:reduce){.cat.pop{animation:none}}
 .cat-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .cat-opts .btn{font-size:1rem;padding:10px 12px}
+/* escuela */
+.m-school{background:#3BA7E0;box-shadow:0 6px 0 #2783B5}
+.school-prog{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:10px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:.95rem}
+.school-prog b{font-family:var(--f-display);font-size:1.3rem}
+.bar-p{flex:1 1 100%;height:10px;border-radius:99px;background:#ECE6FF;overflow:hidden}
+.bar-p i{display:block;height:100%;background:linear-gradient(90deg,#53C9A8,#3BA7E0);border-radius:99px}
+.school-list{display:flex;flex-direction:column;gap:18px}
+.lvl{display:flex;flex-direction:column;gap:10px}
+.lvl-h{display:flex;align-items:center;gap:12px;background:var(--lc);color:#fff;border-radius:20px;padding:8px 14px}
+.lvl-ic{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.3);display:grid;place-items:center}
+.lvl-ic svg{width:40px;height:40px}
+.lvl-h small{display:block;font-size:.85rem;opacity:.95}
+.lvl-h b{font-family:var(--f-display);font-size:1.4rem;line-height:1}
+.cls{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:10px 14px;transition:transform .12s}
+.cls:active{transform:translateY(3px)}
+.cls .cn{width:44px;height:44px;border-radius:50%;background:var(--lc);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-size:1.3rem}
+.cls .cn svg{width:26px;height:26px}
+.cls .cn svg.done{width:44px;height:44px}
+.cls b{display:block;font-family:var(--f-display);font-size:1.1rem;line-height:1.1}
+.cls small{color:var(--ink-soft);font-size:.85rem}
+.cls .go{font-family:var(--f-display);font-size:1.5rem;color:var(--ink-soft)}
+.cls.locked{opacity:.55}
+.cls.locked .cn{background:#B9B0D3}
+.cls.shake{animation:shk .4s}
+@keyframes shk{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.class-lv{margin:-6px 0 0;color:var(--ink-soft);font-size:.9rem}
+.class-card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:14px;display:flex;flex-direction:column;gap:12px;animation:catin .4s}
+.class-card p{margin:0;font-size:1.12rem;line-height:1.4;text-wrap:pretty}
+.mb{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);width:min(100%,340px);aspect-ratio:1;margin:0 auto;border-radius:12px;overflow:hidden;border:5px solid var(--frame,#8C6FD6)}
+.mb span{position:relative;display:grid;place-items:center;min-width:0;min-height:0;overflow:hidden}
+.mb .l{background:var(--sq-light,#FFF4F8)}
+.mb .d{background:var(--sq-dark,#F7B6CC)}
+.mb span>svg{width:88%;height:88%}
+.mb span.hit{box-shadow:inset 0 0 0 3px #E8577E}
+.mb i{position:absolute;font-style:normal;font-size:.55rem;font-weight:700;color:rgba(59,42,85,.55);line-height:1}
+.mb .rk{left:2px;top:2px}.mb .fl{right:2px;bottom:1px}
+.mb .mk{position:absolute;inset:0;margin:auto;border-radius:50%;pointer-events:none}
+.mb .mk.dot{width:34%;height:34%;background:rgba(83,201,168,.85)}
+.mb .mk.ring{width:84%;height:84%;border:3px solid #FFB020}
+.mb .mk.x{width:84%;height:84%;border:3px solid #E8577E}
+.mb .tg{position:absolute;inset:0;margin:auto;width:70%;height:70%}
+.class-dots{display:flex;justify-content:center;gap:8px}
+.class-dots i{width:10px;height:10px;border-radius:50%;background:#D8D0F0}
+.class-dots i.on{background:var(--berry);width:24px;border-radius:99px}
+.class-btns{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.class-btns .btn:disabled{opacity:.45}
+.class-say{align-self:center}
+body[data-dark] .class-lv{color:#E8E2FF}
 /* tableros con foto */
 body[data-photo]{--sq-light:transparent;--sq-dark:transparent;--frame:#1E1B40;--edge1:#5B4FB5;--edge2:#2A2560}
 body[data-photo] .board{background:#0b0f2a var(--board-img) center/cover no-repeat}
@@ -384,6 +432,7 @@ body[data-photo] .sqr .rk,body[data-photo] .sqr .fl{color:#fff;opacity:.9}
   <div class="rank" id="rank"></div>
   <div class="modes">
     <button class="mode m-learn" id="go-learn"><span class="ic" id="ic-learn"></span><span><h3>Aprender</h3><p>Cómo se mueve cada pieza y retos de jaque mate</p></span><span class="go">›</span></button>
+    <button class="mode m-school" id="go-school"><span class="ic" id="ic-school"></span><span><h3>Clases</h3><p>Escuela de ajedrez por niveles, de 6 a 10 años</p></span><span class="go">›</span></button>
     <button class="mode m-adv" id="go-adv"><span class="ic" id="ic-adv"></span><span><h3>Aventura</h3><p>Una historia de 12 capítulos: cada amigo juega mejor</p></span><span class="go">›</span></button>
     <button class="mode m-duo" id="go-duo"><span class="ic" id="ic-duo"></span><span><h3>Dos jugadores</h3><p>Juega con alguien en el mismo aparato</p></span><span class="go">›</span></button>
     <button class="mode m-style" id="go-style"><span class="ic" id="ic-style"></span><span><h3>Mi estilo</h3><p>Colores, piezas, tableros y fondos</p></span><span class="go">›</span></button>
@@ -408,6 +457,22 @@ body[data-photo] .sqr .rk,body[data-photo] .sqr .fl{color:#fff;opacity:.9}
   <p class="section-title">3 · Jugadas buenas</p>
   <p class="hint-text">Aprende trucos de campeón con su explicación y practícalos tú.</p>
   <div class="grid3" id="jugadas"></div>
+</section>
+
+<section class="screen" id="s-school" hidden>
+  <div class="bar"><button class="round back" aria-label="Volver"></button><h2>Clases</h2></div>
+  <p class="hint-text">Cada clase tiene una explicación y ejercicios para practicar. Al terminar una se abre la siguiente. Puedes empezar en el nivel que te toque por tu edad.</p>
+  <div class="school-prog" id="school-prog"></div>
+  <div id="school-list" class="school-list"></div>
+</section>
+
+<section class="screen" id="s-class" hidden>
+  <div class="bar"><button class="round" id="class-back" aria-label="Volver a las clases"></button><h2 id="class-title">Clase</h2></div>
+  <p class="class-lv" id="class-lv"></p>
+  <div class="class-card" id="class-card"></div>
+  <div class="class-dots" id="class-dots"></div>
+  <div class="class-btns"><button class="btn alt" id="class-prev">‹ Atrás</button><button class="btn" id="class-next">Siguiente ›</button></div>
+  <button class="chip class-say" id="class-say"><svg viewBox="0 0 24 24" fill="none" stroke="#3B2A55" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9 H8 L13 5 V19 L8 15 H4 Z"/><path d="M16.5 9 Q19 12 16.5 15"/></svg>Escuchar otra vez</button>
 </section>
 
 <section class="screen" id="s-adv" hidden>
@@ -1244,7 +1309,7 @@ if (!P.advV) {
 if (P.view3d === undefined) P.view3d = true;
 if (P.look) LOOK = Object.assign(LOOK, P.look);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) {} };
-const totalStars = () => Object.values(P.adv).reduce((a, b) => a + b, 0) + Object.keys(P.les).length + Object.keys(P.puz).length + Object.keys(P.jug || {}).length;
+const totalStars = () => Object.values(P.adv).reduce((a, b) => a + b, 0) + Object.keys(P.les).length + Object.keys(P.puz).length + Object.keys(P.jug || {}).length + Object.keys(P.cls || {}).length;
 
 /* ---------- sound ---------- */
 let AC = null;
@@ -1496,7 +1561,7 @@ const MUSIC = (() => {
 })();
 
 /* ---------- navigation ---------- */
-const screens = ['home', 'learn', 'adv', 'game', 'style'];
+const screens = ['home', 'learn', 'adv', 'game', 'style', 'school', 'class'];
 function show(id) {
   screens.forEach(s => { $('s-' + s).hidden = s !== id; });
   if ($('music-pop')) $('music-pop').hidden = true;
@@ -1507,6 +1572,8 @@ function show(id) {
   if (id === 'learn') renderLearn();
   if (id === 'adv') renderAdv();
   if (id === 'style') renderStyle();
+  if (id === 'school') renderSchool();
+  if (id !== 'class' && id !== 'game' && typeof VOICE !== 'undefined') VOICE.stop();
 }
 document.querySelectorAll('.back').forEach(b => { b.innerHTML = icon('back'); b.onclick = () => { sfx.tap(); show('home'); }; });
 
@@ -1551,6 +1618,7 @@ renderMusic();
 function paintHomeArt() {
   $('parade').innerHTML = ['P', 'n', 'B', 'q', 'K', 'r'].map(x => pieceSVG(x)).join('');
   $('ic-learn').innerHTML = pieceSVG('N');
+  $('ic-school').innerHTML = CAP_SVG;
   $('ic-adv').innerHTML = pieceSVG('K');
   $('ic-style').innerHTML = pieceSVG('Q');
   $('ic-duo').innerHTML = `<svg viewBox="0 0 100 100" style="width:52px;height:52px"><g transform="translate(-14 4) scale(.85)">${pieceSVG('P').replace(/<\/?svg[^>]*>/g, '')}</g><g transform="translate(30 4) scale(.85)">${pieceSVG('p').replace(/<\/?svg[^>]*>/g, '')}</g></svg>`;
@@ -3029,57 +3097,382 @@ const JUGADAS = [
     end: 'Con dos torres puedes dar mate a un rey solito: ve empujándolo fila por fila hasta la orilla.' },
 ];
 if (!P.jug) P.jug = {};
-const uciOf = m => E.name(m.from) + E.name(m.to);
+/* ---------- escuela: clases por niveles ---------- */
+// Cada clase: cards (explicación con un tablerito) y exs (ejercicios en el tablero grande).
+// ok de cada paso: lista de jugadas ('e7e8q' si corona) o un tipo: 'mate', 'check', 'any', 'safe' (con from), 'capq', 'develop'.
+// reply: jugada del rival, 'auto' (la mejor del motor) o nada.
+const NIVELES = [
+  { name: 'Explorador', age: '6 y 7 años', p: 'P', color: '#53C9A8' },
+  { name: 'Aprendiz', age: '7 y 8 años', p: 'N', color: '#5AA9E6' },
+  { name: 'Estratega', age: '8 y 9 años', p: 'B', color: '#8C6FD6' },
+  { name: 'Campeón', age: '9 y 10 años', p: 'Q', color: '#E8577E' },
+];
+const EMPTY = '8/8/8/8/8/8/8/8 w - - 0 1';
+const CLASES = [
+  // ---------------- Nivel 1 ----------------
+  { id: 'tablero', lv: 0, name: 'El tablero mágico', sub: 'Filas, columnas y nombres',
+    cards: [
+      { t: 'El tablero tiene 64 casillas, claras y oscuras. Se pone siempre con una casilla clara en la esquina de abajo a la derecha.', fen: EMPTY, marks: 'h1:ring' },
+      { t: 'Las columnas van de abajo hacia arriba y tienen letras, de la a a la h. Las filas van de lado a lado y tienen números, del 1 al 8.', fen: EMPTY, marks: 'e1:dot e2:dot e3:dot e4:dot e5:dot e6:dot e7:dot e8:dot a4:dot b4:dot c4:dot d4:dot f4:dot g4:dot h4:dot' },
+      { t: 'Cada casilla tiene nombre: primero su letra y luego su número. La estrella está en la columna e y en la fila 4: se llama e4.', fen: EMPTY, marks: 'e4:star' },
+      { t: 'Así empieza la partida. Truco: la dama va en una casilla de su color. ¡La dama blanca en casilla clara y la negra en oscura!', fen: E.START, marks: 'd1:ring d8:ring' },
+    ],
+    exs: [
+      { fen: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1', steps: [{ ask: 'Lleva la torre a la casilla a8, donde está la estrella', mark: ['a8'], ok: ['a1a8'], good: '¡Muy bien! a8 está en la columna a y en la fila 8.' }] },
+      { fen: '4k3/8/8/8/8/8/8/3QK3 w - - 0 1', steps: [{ ask: 'Lleva la dama a la casilla h5', mark: ['h5'], ok: ['d1h5'], good: '¡Eso es! h5: columna h, fila 5.' }] },
+      { fen: '4k3/8/8/8/8/8/8/2B1K3 w - - 0 1', steps: [{ ask: 'Lleva el alfil a la casilla g5', mark: ['g5'], ok: ['c1g5'], good: '¡Perfecto! Ya sabes encontrar cualquier casilla.' }] },
+    ],
+    end: 'Ya sabes cómo se llama cada casilla. Primero la letra y luego el número, como e4 o a8.' },
 
-function startJugada(i) {
-  const j = JUGADAS[i];
-  baseGame('jug', E.parse(j.fen), j.name);
-  G.jug = i; G.step = 0;
-  bubble(j.intro, animalSVG('owl'));
-  sayLesson(j.intro);
-  setStatus(j.steps[0].ask);
-  render();
+  { id: 'valor', lv: 0, name: '¿Cuánto vale cada pieza?', sub: 'Puntos de cada pieza',
+    cards: [
+      { t: 'Cada pieza vale puntos. El peón vale 1. El caballo y el alfil valen 3. La torre vale 5. La dama vale 9. ¡El rey no tiene precio: si lo atrapan, se acaba el juego!', fen: '8/8/8/8/2PNBRQK/8/8/8 w - - 0 1', marks: '' },
+      { t: 'Cuando puedas atrapar una pieza, elige la que valga más. Y no regales tus piezas: fíjate si la pieza que vas a atrapar está cuidada.', fen: '8/8/8/8/2PNBRQK/8/8/8 w - - 0 1', marks: 'g4:ring' },
+    ],
+    exs: [
+      { fen: '4k3/8/3q4/2p5/4N3/8/8/7K w - - 0 1', steps: [{ ask: 'Tu caballo puede atrapar un peón o una dama. ¡Elige bien!', ok: ['e4d6'], good: '¡Ñam! La dama vale 9 puntos y el peón solo 1.', bad: { e4c5: 'El peón vale 1 punto, pero la dama vale 9. ¡Atrapa a la dama!' } }] },
+      { fen: '7k/5r2/n7/8/2B5/8/8/6K1 w - - 0 1', steps: [{ ask: 'Tu alfil puede atrapar un caballo o una torre. ¿Cuál vale más?', ok: ['c4f7'], good: '¡Bien! La torre vale 5 y el caballo 3.', bad: { c4a6: 'El caballo vale 3, pero la torre vale 5. ¡Busca la que vale más!' } }] },
+      { fen: '4k3/8/4p3/3n4/p7/8/8/3Q2K1 w - - 0 1', steps: [{ ask: 'Cuidado: una de las piezas negras está cuidada. Atrapa la que está sola', ok: ['d1a4'], good: '¡Muy listo! Ese peón estaba solito. El caballo estaba cuidado por el peón de e6.', bad: { d1d5: 'El peón de e6 cuida al caballo: perderías tu dama (9) por un caballo (3).' } }] },
+    ],
+    end: 'Peón 1, caballo 3, alfil 3, torre 5 y dama 9. ¡Atrapa lo que vale más y no regales tus piezas!' },
+
+  { id: 'jaque', lv: 0, name: '¡Jaque!', sub: 'Atacar al rey',
+    cards: [
+      { t: 'Dar jaque es atacar al rey. Aquí la torre blanca ataca al rey negro por la columna. ¡Es jaque!', fen: '4k3/8/8/8/8/8/8/4R1K1 w - - 0 1', marks: 'e8:x e7:dot e6:dot e5:dot e4:dot e3:dot e2:dot' },
+      { t: 'Cuando su rey está en jaque, el otro jugador tiene que salvarlo en su siguiente jugada. ¡No puede hacer otra cosa!', fen: '4k3/8/8/8/8/8/8/4R1K1 w - - 0 1', marks: 'e8:x' },
+    ],
+    exs: [
+      { fen: '4k3/8/8/8/8/8/8/R5K1 w - - 0 1', steps: [{ ask: 'Da jaque al rey negro con tu torre', ok: 'check', good: '¡Jaque! La torre ataca al rey en línea recta.' }] },
+      { fen: '4k3/8/8/8/8/8/8/5BK1 w - - 0 1', steps: [{ ask: 'Ahora da jaque con el alfil', ok: 'check', good: '¡Jaque en diagonal!' }] },
+      { fen: '4k3/8/8/8/4N3/8/8/7K w - - 0 1', steps: [{ ask: 'Y ahora con el caballo. ¡Recuerda que salta en L!', ok: 'check', good: '¡Jaque de caballo! Es difícil de ver, por eso es tan peligroso.' }] },
+    ],
+    end: 'Jaque es atacar al rey. ¡Todas las piezas pueden dar jaque, menos el rey!' },
+
+  { id: 'salvar', lv: 0, name: 'Salvar al rey', sub: '3 maneras de salir del jaque',
+    cards: [
+      { t: 'Hay 3 maneras de salvar al rey del jaque. La primera: comer a la pieza que da jaque. Aquí el caballo blanco se puede comer a la torre.', fen: '4k3/8/8/4r3/8/5N2/8/4K3 w - - 0 1', marks: 'e5:x e1:ring' },
+      { t: 'La segunda: tapar el jaque, poniendo una pieza en medio. Aquí la torre puede tapar en e3.', fen: '7k/8/1b6/8/8/8/6PP/4R1K1 w - - 0 1', marks: 'e3:star g1:ring' },
+      { t: 'La tercera: mover el rey a una casilla donde nadie lo ataque.', fen: '7k/8/8/8/8/8/8/r3K3 w - - 0 1', marks: 'd2:dot e2:dot f2:dot e1:ring' },
+    ],
+    exs: [
+      { fen: '4k3/8/8/4r3/8/5N2/8/4K3 w - - 0 1', steps: [{ ask: '¡Jaque! Sálvate comiendo a la pieza que ataca', ok: ['f3e5'], good: '¡Bien hecho! Te salvaste y además atrapaste una torre.', no: 'Así te salvas, pero practica comer a la torre que da jaque.' }] },
+      { fen: '7k/8/1b6/8/8/8/6PP/4R1K1 w - - 0 1', steps: [{ ask: '¡Jaque del alfil! Sálvate tapando el jaque con tu torre', ok: ['e1e3'], good: '¡Tapado! La torre protege a su rey.', no: 'Así te salvas, pero practica tapar el jaque con la torre.' }] },
+      { fen: '7k/8/8/8/8/8/8/r3K3 w - - 0 1', steps: [{ ask: '¡Jaque de la torre! Mueve tu rey a una casilla segura', ok: 'any', good: '¡A salvo! Tu rey escapó.' }] },
+    ],
+    end: 'Para salvar al rey: comer, tapar o mover. ¡Piensa cuál es la mejor!' },
+
+  { id: 'mate', lv: 0, name: 'Jaque mate y ahogado', sub: 'Cómo se gana y cómo se empata',
+    cards: [
+      { t: 'Jaque mate es cuando el rey está en jaque y no tiene ninguna manera de salvarse. ¡Así se gana la partida!', fen: 'R5k1/5ppp/8/8/8/8/8/6K1 w - - 0 1', marks: 'g8:x' },
+      { t: 'Ahogado es cuando el rey NO está en jaque, pero ya no puede mover nada. ¡Es empate! Aquí le toca a las negras y no tienen jugadas.', fen: '7k/5Q2/6K1/8/8/8/8/8 w - - 0 1', marks: 'h8:ring' },
+      { t: 'Cuando vas ganando, ten cuidado de no ahogar al rey: déjale una casilla o dale jaque mate.', fen: '7k/5Q2/6K1/8/8/8/8/8 w - - 0 1', marks: 'g8:dot g7:dot h7:dot' },
+    ],
+    exs: [
+      { fen: '6k1/5ppp/8/8/8/8/8/1R4K1 w - - 0 1', steps: [{ ask: 'Da jaque mate con la torre', ok: 'mate', good: '¡Jaque mate! El rey quedó atrapado por sus propios peones.' }] },
+      { fen: '7k/8/6K1/8/8/8/8/5Q2 w - - 0 1', steps: [{ ask: 'Da jaque mate con la dama. ¡Cuidado con el ahogado!', ok: 'mate', good: '¡Jaque mate! La dama y el rey trabajaron juntos.' }] },
+      { fen: 'k7/8/2K5/1Q6/8/8/8/8 w - - 0 1', steps: [{ ask: 'Otra vez: da jaque mate sin ahogar al rey', ok: 'mate', good: '¡Excelente! Ya sabes la diferencia entre mate y ahogado.' }] },
+    ],
+    end: 'Mate: rey en jaque y sin salida, ¡ganas! Ahogado: sin jaque y sin jugadas, ¡es empate!' },
+
+  // ---------------- Nivel 2 ----------------
+  { id: 'enroque', lv: 1, name: 'El enroque', sub: 'Esconder al rey',
+    cards: [
+      { t: 'El enroque es una jugada especial: el rey se mueve dos casillas hacia una torre y la torre salta al otro lado del rey. ¡Es la única vez que mueves dos piezas!', fen: 'r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1', marks: 'g1:star f1:dot' },
+      { t: 'Solo puedes enrocar si el rey y esa torre no se han movido, si no hay piezas en medio, y si el rey no está en jaque ni pasa por una casilla atacada.', fen: 'r3k2r/pppppppp/8/8/2b5/8/PPPP1PPP/R3K2R w KQkq - 0 1', marks: 'f1:x c4:ring' },
+    ],
+    exs: [
+      { fen: 'r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1', steps: [{ ask: 'Haz el enroque corto: mueve el rey dos casillas hacia la derecha', ok: ['e1g1'], good: '¡Enroque corto! El rey quedó protegido en la esquina.' }] },
+      { fen: 'r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1', steps: [{ ask: 'Ahora el enroque largo: mueve el rey dos casillas hacia la izquierda', ok: ['e1c1'], good: '¡Enroque largo! La torre llegó al centro.' }] },
+      { fen: 'r3k2r/pppppppp/8/8/2b5/8/PPPP1PPP/R3K2R w KQkq - 0 1', steps: [{ ask: 'El alfil negro vigila f1, así que no puedes enrocar corto. ¡Enroca del otro lado!', ok: ['e1c1'], good: '¡Muy bien pensado! El rey no puede pasar por una casilla atacada.' }] },
+    ],
+    end: 'Enroca pronto en tus partidas: tu rey queda a salvo y tu torre sale a jugar.' },
+
+  { id: 'especiales', lv: 1, name: 'Coronar y comer al paso', sub: 'Jugadas especiales del peón',
+    cards: [
+      { t: 'Cuando un peón llega a la última fila, corona: se convierte en dama, torre, alfil o caballo. ¡Casi siempre conviene la dama!', fen: '8/3P1k2/8/8/8/8/8/4K3 w - - 0 1', marks: 'd8:star' },
+      { t: 'Comer al paso: si un peón rival avanza dos casillas y queda junto a tu peón, puedes comerlo como si hubiera avanzado solo una. ¡Solo en ese momento!', fen: '4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1', marks: 'd6:star d5:x' },
+    ],
+    exs: [
+      { fen: '8/3P1k2/8/8/8/8/8/4K3 w - - 0 1', steps: [{ ask: 'Avanza el peón y conviértelo en dama', ok: ['d7d8q'], good: '¡Coronaste! Ahora tienes una dama nueva.', bad: { d7d8r: 'La torre está bien, pero la dama vale más. ¡Elige la dama!', d7d8b: 'Mejor elige la dama: vale mucho más.', d7d8n: 'Mejor elige la dama: vale mucho más.' } }] },
+      { fen: '4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1', steps: [{ ask: 'El peón negro acaba de avanzar dos casillas. ¡Cómelo al paso!', mark: ['d6'], ok: ['e5d6'], good: '¡Al paso! Tu peón se lo comió como si hubiera avanzado solo una casilla.', no: 'Esa jugada vale, pero practica comer al paso: mueve tu peón en diagonal a la estrella.' }] },
+      { fen: '1r2k3/2P5/8/8/8/8/8/4K3 w - - 0 1', steps: [{ ask: 'Corona tu peón. ¡Ojo con la torre negra!', ok: ['c7b8q'], good: '¡Genial! Coronaste comiéndote la torre.', bad: { c7c8q: 'Si coronas en c8, la torre negra se come tu dama nueva. ¡Corona comiéndote la torre!' } }] },
+    ],
+    end: 'Corona tus peones en dama y recuerda la captura al paso: ¡muchos no la conocen!' },
+
+  { id: 'cuidar', lv: 1, name: 'Cuida tus piezas', sub: 'No las dejes atrapar',
+    cards: [
+      { t: 'Antes de mover, pregúntate: ¿qué quiere hacer el otro equipo? ¿Está atacando alguna de mis piezas?', fen: '4k3/8/2p5/5p2/1p6/2N5/8/4K3 w - - 0 1', marks: 'c3:x b4:ring' },
+      { t: 'Si atacan una pieza tuya, sálvala: muévela a una casilla donde nadie la pueda atrapar.', fen: '4k3/8/2p5/5p2/1p6/2N5/8/4K3 w - - 0 1', marks: 'a4:dot a2:dot b1:dot d1:dot e2:dot b5:x d5:x e4:x' },
+    ],
+    exs: [
+      { fen: '4k3/8/8/4p3/3Q4/8/8/4K3 w - - 0 1', steps: [{ ask: '¡Un peón ataca a tu dama! Sálvala', ok: 'safe', from: 'd4', good: '¡Bien! Tu dama está a salvo.' }] },
+      { fen: '4k3/8/2p5/5p2/1p6/2N5/8/4K3 w - - 0 1', steps: [{ ask: 'Un peón ataca a tu caballo. Llévalo a una casilla donde nadie lo pueda atrapar', ok: 'safe', from: 'c3', good: '¡Perfecto! Ningún peón negro puede atrapar a tu caballo ahí.' }] },
+      { fen: '4k3/8/3n4/8/8/1b6/8/R3K3 w - - 0 1', steps: [{ ask: 'El alfil negro ataca a tu torre. ¡Ponla a salvo!', ok: 'safe', from: 'a1', good: '¡Muy bien! Tu torre ya no está en peligro.' }] },
+    ],
+    end: 'Antes de cada jugada, revisa si atacan tus piezas. ¡Un buen jugador cuida a su equipo!' },
+
+  { id: 'pasillo', lv: 1, name: 'El mate del pasillo', sub: 'El rey encerrado',
+    cards: [
+      { t: 'Cuando el rey está detrás de sus peones sin un huequito, una torre o una dama en la última fila le da jaque mate.', fen: '3R2k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 1', marks: 'g8:x f7:dot g7:dot h7:dot' },
+      { t: 'Para que no te pase a ti: mueve uno de tus peones (por ejemplo h3) y deja una ventanita para que tu rey pueda escapar.', fen: '6k1/5ppp/8/8/8/7P/5PP1/6K1 w - - 0 1', marks: 'h2:star' },
+    ],
+    exs: [
+      { fen: '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', steps: [{ ask: 'Da el mate del pasillo con la torre', ok: 'mate', good: '¡Mate del pasillo! Sus propios peones no lo dejaron escapar.' }] },
+      { fen: '1k6/ppp5/8/8/8/8/5PPP/4Q1K1 w - - 0 1', steps: [{ ask: 'Ahora con la dama', ok: 'mate', good: '¡Jaque mate! Los peones encerraron a su propio rey.' }] },
+      { fen: '3r2k1/5ppp/8/8/8/8/5PPP/3RR1K1 w - - 0 1', steps: [{ ask: 'Hay una torre negra cuidando. ¡Busca el mate de todos modos!', ok: 'mate', good: '¡Bravo! Comiste la torre que defendía y fue mate.', bad: { e1e8: 'La torre negra de d8 se comería tu torre. ¡Primero quítala del camino!' } }] },
+    ],
+    end: 'Busca reyes encerrados detrás de sus peones… ¡y deja una ventanita para el tuyo!' },
+
+  // ---------------- Nivel 3 ----------------
+  { id: 'dobles', lv: 2, name: 'Ataques dobles', sub: 'Dos ataques a la vez',
+    cards: [
+      { t: 'Un ataque doble es atacar dos piezas al mismo tiempo. El otro jugador solo puede salvar una… ¡y tú atrapas la otra!', fen: '6k1/3q4/5N2/8/8/8/8/6K1 w - - 0 1', marks: 'g8:x d7:x' },
+      { t: 'Si uno de los ataques es un jaque, es todavía mejor: el rey tiene que escapar primero y la otra pieza se queda sin ayuda.', fen: '7k/8/8/8/3Q4/8/7K/r7 w - - 0 1', marks: 'h8:x a1:x' },
+    ],
+    exs: [
+      { fen: '6k1/3q4/8/8/4N3/8/8/6K1 w - - 0 1', steps: [
+        { ask: 'Salta con el caballo para atacar al rey y a la dama a la vez', ok: ['e4f6'], reply: 'g8g7', good: '¡Tenedor! Jaque al rey y ataque a la dama.' },
+        { ask: 'El rey escapó. ¡Atrapa a la dama!', ok: ['f6d7'], good: '¡Atrapaste a la dama con un caballo!' }] },
+      { fen: '7k/8/8/8/8/8/7K/r2Q4 w - - 0 1', steps: [
+        { ask: 'Mueve tu dama para dar jaque y atacar a la torre al mismo tiempo', ok: ['d1d4'], reply: 'h8h7', good: '¡Ataque doble! Jaque al rey y la torre está atacada.' },
+        { ask: '¡Ahora atrapa a la torre!', ok: ['d4a1'], good: '¡Muy bien! La dama es muy buena para los ataques dobles.' }] },
+    ],
+    end: 'Busca jugadas que ataquen dos cosas a la vez, sobre todo si una es el rey.' },
+
+  { id: 'clavadas', lv: 2, name: 'Clavadas y pinchos', sub: 'Piezas en línea',
+    cards: [
+      { t: 'Clavada: atacas una pieza que tiene a su rey detrás. ¡No se puede mover porque dejaría a su rey en jaque!', fen: '4k3/3q4/8/1B6/P7/8/8/4K3 w - - 0 1', marks: 'd7:x e8:ring' },
+      { t: 'Pincho: es al revés. Das jaque al rey, el rey se tiene que mover… ¡y atrapas la pieza que estaba detrás!', fen: 'q3k2R/8/8/8/8/8/8/4K3 w - - 0 1', marks: 'e8:x a8:ring' },
+    ],
+    exs: [
+      { fen: '4k3/3q4/8/8/P7/8/8/4KB2 w - - 0 1', steps: [
+        { ask: 'Clava a la dama negra con tu alfil', ok: ['f1b5'], reply: 'd7b5', good: '¡Clavada! La dama no puede escapar. Prefiere comerse tu alfil…' },
+        { ask: '¡Atrapa a la dama con el peón!', ok: ['a4b5'], good: '¡Cambiaste un alfil (3) por una dama (9)!' }] },
+      { fen: 'q3k3/8/8/8/8/8/8/4K2R w - - 0 1', steps: [
+        { ask: 'Haz un pincho: da jaque con la torre en la fila del rey y la dama', ok: ['h1h8'], reply: 'e8d7', good: '¡Pincho! El rey se tiene que mover y la dama queda sola.' },
+        { ask: '¡Atrapa a la dama!', ok: ['h8a8'], good: '¡Excelente! El pincho funcionó.' }] },
+    ],
+    end: 'Cuando dos piezas rivales están en la misma línea, busca una clavada o un pincho.' },
+
+  { id: 'descubierta', lv: 2, name: 'Ataque a la descubierta', sub: 'El ataque escondido',
+    cards: [
+      { t: 'Si una pieza tuya tapa a tu torre, alfil o dama, al moverla aparece un ataque escondido. ¡Es un ataque a la descubierta!', fen: '4k3/1q6/8/8/4B3/8/8/4R1K1 w - - 0 1', marks: 'e8:x e1:ring' },
+      { t: 'Lo mejor: que la pieza que mueves también ataque algo. ¡Así son dos ataques al mismo tiempo!', fen: '4k3/1q6/8/8/4B3/8/8/4R1K1 w - - 0 1', marks: 'e8:x b7:x' },
+    ],
+    exs: [
+      { fen: '4k3/1q6/8/8/4B3/8/8/4R1K1 w - - 0 1', steps: [{ ask: 'Mueve el alfil para descubrir el jaque de tu torre… ¡y gana algo grande!', ok: ['e4b7'], good: '¡Jaque a la descubierta y te comiste a la dama!', no: 'Diste jaque, ¡pero con el alfil te podías comer a la dama!' }] },
+      { fen: '3k4/4q3/8/8/3N4/8/8/3R2K1 w - - 0 1', steps: [
+        { ask: 'Mueve el caballo para descubrir el jaque de la torre y atacar a la dama', ok: ['d4f5'], reply: 'auto', good: '¡Descubierta! Jaque de la torre y el caballo ataca a la dama.', bad: { d4c6: '¡Uy! Desde ahí el rey negro se puede comer tu caballo. Busca otra casilla que ataque a la dama.' } },
+        { ask: '¡Ahora atrapa a la dama!', ok: 'capq', good: '¡Lo lograste! La descubierta es un arma de campeones.' }] },
+    ],
+    end: 'Fíjate en tus piezas que están en línea con el rey rival: ¡pueden esconder un ataque!' },
+
+  // ---------------- Nivel 4 ----------------
+  { id: 'damarey', lv: 3, name: 'Mate con dama y rey', sub: 'El mate más útil',
+    cards: [
+      { t: 'Con dama y rey puedes ganar contra un rey solo. La dama lo encierra como en una caja cada vez más chica, y tu rey se acerca para ayudar.', fen: '8/8/3k4/8/5Q2/8/8/4K3 w - - 0 1', marks: 'c5:dot d5:dot e5:dot c6:dot e6:dot c7:dot d7:dot e7:dot' },
+      { t: 'Al final, el rey rival queda en la orilla. Tu rey cuida a la dama y la dama da el mate. ¡Cuidado con el ahogado!', fen: 'k7/1Q6/1K6/8/8/8/8/8 w - - 0 1', marks: 'a8:x' },
+    ],
+    exs: [
+      { fen: 'k7/8/1K6/8/8/8/7Q/8 w - - 0 1', steps: [{ ask: 'Da jaque mate con la dama', ok: 'mate', good: '¡Mate! El rey cuida a la dama y no hay escape.' }] },
+      { fen: '3k4/8/3K4/8/8/8/8/Q7 w - - 0 1', steps: [{ ask: 'Otra vez: busca el mate', ok: 'mate', good: '¡Jaque mate en la orilla!' }] },
+    ],
+    end: 'Dama y rey siempre ganan contra un rey solito: encierra, acércate y da el mate sin ahogar.' },
+
+  { id: 'cuadrado', lv: 3, name: 'La regla del cuadrado', sub: '¿Alcanza el rey al peón?',
+    cards: [
+      { t: 'Imagina un cuadrado desde tu peón hasta la última fila. Si el rey rival puede entrar en ese cuadrado, alcanza al peón. Si no, ¡tu peón corona!', fen: '8/8/8/8/P7/8/5k2/7K w - - 0 1', marks: 'a4:ring a5:dot a6:dot a7:dot a8:dot b8:dot c8:dot d8:dot e8:dot e7:dot e6:dot e5:dot e4:dot b4:dot c4:dot d4:dot' },
+      { t: 'Aquí el rey negro está fuera del cuadrado: ¡el peón blanco corre y gana la carrera!', fen: '8/8/8/8/P7/8/5k2/7K w - - 0 1', marks: 'f2:x' },
+    ],
+    exs: [
+      { fen: '8/8/8/8/P7/8/5k2/7K w - - 0 1', steps: [
+        { ask: 'El rey no alcanza a tu peón. ¡Avánzalo!', ok: ['a4a5'], reply: 'auto', good: '¡Corre, peoncito!' },
+        { ask: 'Sigue avanzando', ok: ['a5a6'], reply: 'auto', good: '¡Ya casi!' },
+        { ask: 'Un paso más', ok: ['a6a7'], reply: 'auto', good: '¡El rey no llega!' },
+        { ask: '¡Corona en dama!', ok: ['a7a8q'], good: '¡Ganaste la carrera! El rey estaba fuera del cuadrado.' }] },
+      { fen: '8/8/2k5/8/1P5P/8/8/K7 w - - 0 1', steps: [
+        { ask: 'Uno de tus peones puede ganar la carrera. ¡Avánzalo!', ok: ['h4h5'], reply: 'auto', good: '¡Bien visto! El rey negro está lejos de ese peón.', bad: { b4b5: 'El rey negro está dentro del cuadrado de ese peón: lo alcanzaría. Prueba con el otro.' } },
+        { ask: 'Sigue avanzando', ok: ['h5h6'], reply: 'auto', good: '¡Corre!' },
+        { ask: 'Un paso más', ok: ['h6h7'], reply: 'auto', good: '¡Ya casi!' },
+        { ask: '¡Corona en dama!', ok: ['h7h8q'], good: '¡Coronaste! La regla del cuadrado nunca falla.' }] },
+    ],
+    end: 'Antes de correr con un peón, dibuja el cuadrado en tu mente: si el rey no entra, ¡tu peón corona!' },
+
+  { id: 'dosjugadas', lv: 3, name: 'Piensa dos jugadas', sub: 'Mate en 2',
+    cards: [
+      { t: 'Los campeones piensan así: «si yo juego esto, él tiene que jugar aquello… y entonces yo doy mate».', fen: '7k/6pp/8/5q2/8/2R5/R4PPP/6K1 w - - 0 1', marks: 'a8:star' },
+      { t: 'Muchas veces el truco es dar un jaque primero: así el otro jugador tiene que hacer lo que tú quieres.', fen: '7k/6pp/8/5q2/8/2R5/R4PPP/6K1 w - - 0 1', marks: 'a8:star h8:x' },
+    ],
+    exs: [
+      { fen: '7k/6pp/8/5q2/8/2R5/R4PPP/6K1 w - - 0 1', steps: [
+        { ask: 'Da jaque con una torre en la última fila. ¡La dama negra tendrá que tapar!', ok: ['a2a8'], reply: 'auto', good: '¡Jaque! La dama tuvo que ponerse en medio…' },
+        { ask: '¡Ahora da jaque mate!', ok: 'mate', good: '¡Mate en 2! Pensaste como campeón.' }] },
+      { fen: '6k1/3N1ppp/8/8/6Q1/8/5PPP/6K1 w - - 0 1', steps: [
+        { ask: 'Da jaque con el caballo. El peón de g7 no se lo puede comer: ¡tu dama lo tiene clavado!', ok: ['d7f6'], reply: 'auto', good: '¡Jaque! El rey tiene que moverse…' },
+        { ask: '¡Ahora busca el jaque mate!', ok: 'mate', good: '¡Mate en 2! La dama y el caballo son un gran equipo.' }] },
+    ],
+    end: 'Antes de mover, piensa: ¿qué va a contestar mi rival? Así encontrarás jugadas de campeón.' },
+
+  { id: 'damatemprano', lv: 3, name: 'La dama no sale temprano', sub: 'Saca piezas atacando',
+    cards: [
+      { t: 'Si la dama rival sale muy pronto, ¡aprovecha! Atácala con tus caballos y alfiles: ella tiene que huir y tú sacas tus piezas.', fen: 'rnb1kbnr/pppp1ppp/8/4p3/4P2q/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3', marks: 'h4:x f3:star' },
+    ],
+    exs: [
+      { fen: 'rnb1kbnr/pppp1ppp/8/4p3/4P2q/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3', steps: [
+        { ask: 'Saca una pieza atacando a la dama negra', ok: ['g1f3'], reply: 'auto', good: '¡Muy bien! Sacaste el caballo y la dama tiene que huir.', bad: { g2g3: 'También ataca a la dama, pero mejor saca una pieza nueva al mismo tiempo. ¡Prueba con un caballo!' } },
+        { ask: 'Sigue sacando piezas: mueve un alfil o un caballo', ok: 'develop', reply: 'auto', good: '¡Eso! Cada pieza que sacas te hace más fuerte.' },
+        { ask: '¡Protege a tu rey! Haz el enroque corto si puedes, o saca otra pieza', ok: 'develop', good: '¡Muy bien jugado! Tu equipo está listo para la batalla.' }] },
+    ],
+    end: 'No saques tu dama muy pronto. Y si tu rival lo hace, atácala mientras sacas tus piezas.' },
+];
+if (!P.cls) P.cls = {};
+
+const uciOf = m => E.name(m.from) + E.name(m.to) + (m.promo ? m.promo.toLowerCase() : '');
+function sayLesson(t) { if (P.catVoice !== false) VOICE.say(t.replace(/«|»/g, '')); }
+// ¿la jugada m (desde la posición s) cumple con el paso st?
+function okMove(st, s, m) {
+  const t = E.make(s, m), u = uciOf(m);
+  if (Array.isArray(st.ok)) return st.ok.includes(u);
+  switch (st.ok) {
+    case 'mate': return E.status(t) === 'mate';
+    case 'check': return E.inCheck(t, 'b');
+    case 'any': return true;
+    case 'safe': return E.name(m.from) === st.from && !E.attacked(t.b, m.to, false);
+    case 'capq': return m.cap === 'q';
+    case 'develop': { const p = s.b[m.from]; return ((p === 'N' || p === 'B') && (m.from >> 3) === 7) || (p === 'K' && Math.abs(m.to - m.from) === 2); }
+  }
+  return false;
 }
-function sayLesson(t) { if (P.catVoice !== false) VOICE.say(t); }
+// práctica guiada: cfg = { title, exs: [{ fen, intro, steps }], onDone, restart, back }
+function startDrill(cfg, k = 0) {
+  const ex = cfg.exs[k], n = cfg.exs.length;
+  baseGame('jug', E.parse(ex.fen), n > 1 ? `${cfg.title} · ${k + 1}/${n}` : cfg.title);
+  G.drill = cfg; G.ex = k; G.step = 0;
+  const intro = ex.intro || (k === 0 && cfg.intro) || '';
+  bubble(intro || ex.steps[0].ask, animalSVG('owl'));
+  if (intro) sayLesson(intro);
+  stepUI(); render();
+}
+function stepUI() {
+  const st = G.drill.exs[G.ex].steps[G.step];
+  setStatus(st.ask);
+  G.targets = st.mark ? new Set(st.mark.map(E.sq)) : null;
+}
 function jugStep(m) {
-  const j = JUGADAS[G.jug], st = j.steps[G.step], u = uciOf(m);
-  const right = st.ok.includes('mate') ? E.status(G.s) === 'mate' : st.ok.includes(u);
+  const ex = G.drill.exs[G.ex], st = ex.steps[G.step], u = uciOf(m), prev = G.hist[G.hist.length - 1].s;
   render();
-  if (!right) {
+  if (!okMove(st, prev, m)) {
     sfx.oops();
-    const why = st.bad && st.bad[u];
+    let why = st.bad && st.bad[u];
+    if (!why && E.status(G.s) === 'stalemate') why = '¡Ahogado! El rey negro no está en jaque pero ya no puede moverse: sería empate. Busca el jaque mate.';
+    if (!why && st.ok === 'safe' && E.name(m.from) === st.from) why = '¡Ahí también la pueden atrapar! Busca una casilla donde ninguna pieza negra llegue.';
+    if (!why && st.ok === 'safe') why = 'Mueve la pieza que está en peligro.';
+    if (!why) why = st.no;
     if (why) { bubble(why); sayLesson(why); }
-    setStatus(why ? 'Esa no es la mejor. ¡Prueba otra!' : 'Casi… esa no es. Lee la pista de arriba y prueba otra', true);
+    setStatus(why ? 'Esa no es. ¡Prueba otra!' : 'Casi… esa no es. Lee la pista de arriba y prueba otra', true);
     G.busy = true;
     setTimeout(() => { const h = G.hist.pop(); G.s = h.s; G.last = h.last; G.busy = false; render(); }, 1000);
     return;
   }
   m.cap ? sfx.cap() : sfx.move();
   bubble(st.good); sayLesson(st.good);
+  G.targets = null;
   G.step++;
-  if (G.step >= j.steps.length) {
-    const first = !P.jug[j.id];
-    P.jug[j.id] = 1; save(); G.over = true;
-    setStatus('¡Lo lograste!');
-    setTimeout(() => winModal({ title: '¡Aprendiste ' + (j.name.startsWith('La ') || j.name.startsWith('El ') ? j.name.toLowerCase() : 'algo nuevo') + '!', text: j.end, stars: 1, of: 1, av: animalSVG('owl'), fresh: first,
-      next: G.jug < JUGADAS.length - 1 ? (k => () => startJugada(k))(G.jug + 1) : () => show('learn'), nextLabel: G.jug < JUGADAS.length - 1 ? 'Siguiente jugada' : 'Volver a Aprender', again: (k => () => startJugada(k))(G.jug), back: 'learn' }), 2200);
+  if (G.step >= ex.steps.length) {
+    G.over = true; render();
+    const cfg = G.drill, k = G.ex;
+    if (k < cfg.exs.length - 1) {
+      setStatus(`¡Ejercicio ${k + 1} de ${cfg.exs.length} listo!`);
+      setTimeout(() => { if (G && G.drill === cfg && G.ex === k) startDrill(cfg, k + 1); }, 2600);
+    } else { setStatus('¡Lo lograste!'); setTimeout(() => { if (G && G.drill === cfg) cfg.onDone(); }, 2200); }
     return;
   }
   setStatus('¡Muy bien!');
   if (st.reply) {
     G.busy = true;
     setTimeout(() => {
-      const r = E.legal(G.s).find(x => uciOf(x) === st.reply);
+      if (!G || G.mode !== 'jug') return;
+      const r = st.reply === 'auto' ? E.best(G.s, 3, 0, true) : E.legal(G.s).find(x => uciOf(x) === st.reply);
       if (r) { applyMove(r); r.cap ? sfx.cap() : sfx.move(); }
-      G.busy = false; setStatus(j.steps[G.step].ask); render();
+      G.busy = false; stepUI(); render();
     }, 1600);
-  } else setStatus(j.steps[G.step].ask);
+  } else { stepUI(); render(); }
 }
 function jugHint() {
-  const st = JUGADAS[G.jug].steps[G.step];
-  const m = st.ok.includes('mate') ? E.legal(G.s).find(x => E.status(E.make(G.s, x)) === 'mate') : E.legal(G.s).find(x => st.ok.includes(uciOf(x)));
+  const st = G.drill.exs[G.ex].steps[G.step];
+  const m = E.legal(G.s).find(x => okMove(st, G.s, x));
   if (m) { G.hint = [m.from, m.to]; setStatus('Mueve la pieza que brilla a la casilla que brilla'); render(); }
 }
+function startJugada(i) {
+  const j = JUGADAS[i];
+  startDrill({ title: j.name, exs: [{ fen: j.fen, intro: j.intro, steps: j.steps }], back: 'learn', restart: () => startJugada(i),
+    onDone: () => {
+      const first = !P.jug[j.id]; P.jug[j.id] = 1; save();
+      const last = i === JUGADAS.length - 1;
+      winModal({ title: '¡Aprendiste ' + (/^(La|El) /.test(j.name) ? j.name.toLowerCase() : 'algo nuevo') + '!', text: j.end, stars: 1, of: 1, av: animalSVG('owl'), fresh: first,
+        next: last ? () => show('learn') : () => startJugada(i + 1), nextLabel: last ? 'Volver a Aprender' : 'Siguiente jugada', again: () => startJugada(i), back: 'learn' });
+    } });
+}
+
+/* ---------- escuela: pantallas ---------- */
+const clsOpen = i => i === 0 || CLASES[i - 1].lv !== CLASES[i].lv || !!P.cls[CLASES[i - 1].id] || !!P.cls[CLASES[i].id];
+function miniBoard(fen, marks) {
+  const rows = fen.split(' ')[0].split('/');
+  const cells = [];
+  rows.forEach(r => { for (const ch of r) { if (/\d/.test(ch)) for (let k = 0; k < +ch; k++) cells.push(''); else cells.push(ch); } });
+  const mk = {};
+  (marks || '').split(/\s+/).filter(Boolean).forEach(x => { const [sq, t] = x.split(':'); mk[E.sq(sq)] = t; });
+  return `<div class="mb" aria-hidden="true">${cells.map((p, i) => {
+    const r = i >> 3, c = i & 7, light = (r + c) % 2 === 0, m = mk[i];
+    const coord = (c === 0 ? `<i class="rk">${8 - r}</i>` : '') + (r === 7 ? `<i class="fl">${'abcdefgh'[c]}</i>` : '');
+    const mark = m === 'star' ? targetSVG() : m ? `<b class="mk ${m}"></b>` : '';
+    return `<span class="${light ? 'l' : 'd'}${m === 'x' ? ' hit' : ''}">${coord}${p ? pieceSVG(p) : ''}${mark}</span>`;
+  }).join('')}</div>`;
+}
+const CAP_SVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 26 L32 14 L58 26 L32 38 Z" fill="#3B2A55"/><path d="M16 31 V43 C16 49 48 49 48 43 V31 L32 38 Z" fill="#5B4785"/><path d="M58 26 V40" stroke="#FFC94D" stroke-width="3" stroke-linecap="round"/><circle cx="58" cy="42" r="3.5" fill="#FFC94D"/></svg>';
+function renderSchool() {
+  const done = CLASES.filter(c => P.cls[c.id]).length;
+  $('school-prog').innerHTML = `<b>${done}</b> de ${CLASES.length} clases terminadas<span class="bar-p"><i style="width:${Math.round(done / CLASES.length * 100)}%"></i></span>`;
+  $('school-list').innerHTML = NIVELES.map((n, lv) => {
+    const items = CLASES.map((c, i) => [c, i]).filter(([c]) => c.lv === lv);
+    return `<div class="lvl" style="--lc:${n.color}"><div class="lvl-h"><span class="lvl-ic">${pieceSVG(n.p)}</span><span><small>Nivel ${lv + 1} · ${n.age}</small><b>${n.name}</b></span></div>
+      ${items.map(([c, i]) => { const open = clsOpen(i), ok = !!P.cls[c.id];
+        return `<button class="cls ${open ? '' : 'locked'}" data-c="${i}" ${open ? '' : 'aria-disabled="true"'}><span class="cn">${ok ? checkSVG : open ? i + 1 : icon('lock')}</span><span><b>${c.name}</b><small>${c.sub}</small></span><span class="go">›</span></button>`; }).join('')}</div>`;
+  }).join('');
+  $('school-list').querySelectorAll('[data-c]').forEach(b => b.onclick = () => {
+    const i = +b.dataset.c;
+    if (!clsOpen(i)) { sfx.oops(); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); return; }
+    sfx.tap(); openClass(i);
+  });
+}
+let CL = null;
+function openClass(i) { CL = { i, k: 0 }; show('class'); renderClass(); }
+function renderClass() {
+  const c = CLASES[CL.i], card = c.cards[CL.k], last = CL.k === c.cards.length - 1;
+  $('class-title').textContent = c.name;
+  $('class-lv').textContent = `Nivel ${c.lv + 1} · ${NIVELES[c.lv].name} · Clase ${CL.i + 1}`;
+  $('class-card').innerHTML = `${miniBoard(card.fen, card.marks)}<p>${card.t}</p>`;
+  $('class-dots').innerHTML = c.cards.map((_, k) => `<i class="${k === CL.k ? 'on' : ''}"></i>`).join('');
+  $('class-prev').disabled = CL.k === 0;
+  $('class-next').textContent = last ? '¡A practicar!' : 'Siguiente ›';
+  sayLesson(card.t);
+}
+function startClassPractice(i) {
+  const c = CLASES[i];
+  startDrill({ title: c.name, exs: c.exs, back: 'school', restart: () => startClassPractice(i),
+    intro: '¡Ahora practica lo que aprendiste en la clase! Si te atoras, usa la Pista.',
+    onDone: () => {
+      const first = !P.cls[c.id]; P.cls[c.id] = 1; save();
+      const nx = i + 1 < CLASES.length ? i + 1 : -1, newLv = nx > 0 && CLASES[nx].lv !== c.lv;
+      winModal({ title: '¡Clase terminada!', text: c.end + (newLv ? ` ¡Terminaste el nivel ${NIVELES[c.lv].name}!` : ''), stars: 1, of: 1, av: animalSVG('owl'), fresh: first,
+        next: nx < 0 ? () => show('school') : () => openClass(nx), nextLabel: nx < 0 ? '¡Terminaste la escuela!' : 'Siguiente clase', again: () => startClassPractice(i), back: 'school' });
+    } });
+}
+$('class-prev').onclick = () => { if (CL.k > 0) { sfx.tap(); CL.k--; renderClass(); } };
+$('class-next').onclick = () => { sfx.tap(); const c = CLASES[CL.i]; if (CL.k < c.cards.length - 1) { CL.k++; renderClass(); } else { VOICE.stop(); startClassPractice(CL.i); } };
+$('class-say').onclick = () => { sfx.tap(); const c = CLASES[CL.i]; VOICE.say(c.cards[CL.k].t); };
+$('class-back').onclick = () => { sfx.tap(); show('school'); };
+$('go-school').onclick = () => { sfx.tap(); show('school'); };
 
 /* lessons */
 function lessonStep(m) {
@@ -3183,14 +3576,15 @@ $('a-reset').onclick = () => {
   if (G.mode === 'ai') startAI(G.level);
   else if (G.mode === 'duo') startDuo();
   else if (G.mode === 'lesson') startLesson(G.lesson);
-  else if (G.mode === 'jug') startJugada(G.jug);
+  else if (G.mode === 'jug') G.drill.restart();
   else startPuzzle(G.puzzle);
 };
 $('g-back').innerHTML = icon('back');
+$('class-back').innerHTML = icon('back');
 $('g-back').onclick = () => {
   sfx.tap();
-  const m = G && G.mode; G = null;
-  show(m === 'ai' ? 'adv' : m === 'lesson' || m === 'puzzle' || m === 'jug' ? 'learn' : 'home');
+  const m = G && G.mode, bk = G && G.drill && G.drill.back; G = null;
+  show(bk || (m === 'ai' ? 'adv' : m === 'lesson' || m === 'puzzle' ? 'learn' : 'home'));
 };
 
 /* ---------- end of game ---------- */

@@ -18,7 +18,7 @@ Ajedrez tierno para niños. Aprenden a mover cada pieza, resuelven retos de jaqu
 
 El progreso se guarda en el navegador de cada aparato.
 
-Para usarla como app en el celular: ábrela en el navegador y elige **Agregar a pantalla de inicio**.
+Para usarla como app en el celular: en Android, ábrela en Chrome y elige **Instalar app** en el menú de los tres puntos; en iPhone o iPad, ábrela en Safari, toca Compartir y elige **Agregar a pantalla de inicio**. Una vez abierta, funciona también sin internet (menos la música grabada).
 
 ## Archivos
 

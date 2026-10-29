@@ -4130,5 +4130,6 @@ if (!ME().name && !P.askedName) { P.askedName = 1; save(); setTimeout(() => prof
 })();
 
 </script>
+<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>

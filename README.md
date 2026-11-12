@@ -4,17 +4,23 @@ Ajedrez tierno para niños. Aprenden a mover cada pieza, resuelven retos de jaqu
 
 **Jugar:** https://pardaillan4-alt.github.io/Ajedrez-infantil/
 
-## Qué incluye
+## Qué incluye (versión 1.0)
 
-- **Aprender:** 6 lecciones (una por pieza), 5 retos de mate en 1 y 6 jugadas buenas con explicación para practicar (buen comienzo, pieza sin cuidar, tenedor, clavada, doble ataque de peón y mate de la escalera).
-- **Clases:** escuela de ajedrez de 30 clases en 5 niveles por edad (Explorador 6-7, Aprendiz 7-8, Estratega 8-9, Campeón 9-10 y Maestro 10+ años): reglas y buenos modales, tablero, valor de las piezas, jaque, mate, ahogado y tablas, enroque, coronación y al paso, notación, aperturas, mates famosos, tácticas (ataques dobles, clavadas, pinchos, descubiertas, sacrificios), finales (regla del cuadrado, oposición, torres) y estrategia (peones pasados, columnas abiertas, piezas activas). Cada clase tiene una explicación con tableritos, leída en voz alta, y ejercicios para practicar.
-- **Perfiles de jugador:** cada niño entra con su nombre y su pieza favorita y guarda sus propias estrellas, clases y estilo.
+- **Jugar:** partida contra la compu con 12 rivales de dificultad creciente, eligiendo blancas, negras o al azar. Incluye un **búho entrenador** que avisa antes de perder una pieza o de caer en un mate, y una **fuerza** del jugador que sube y baja con cada partida.
+- **Repaso de partidas:** jugada por jugada, con la notación en español y comentarios del búho (buenas jugadas, mejorables y errores, con la mejor jugada sugerida).
+- **Clases:** escuela de 30 clases en 5 niveles por edad (Explorador 6-7, Aprendiz 7-8, Estratega 8-9, Campeón 9-10 y Maestro 10+), con explicación en voz alta y ejercicios.
+- **Aprender:** 6 lecciones de piezas, 5 retos de mate en 1 y 6 jugadas buenas explicadas.
+- **Rompecabezas:** 100 problemas verificados con el motor, en 5 niveles (atrapa la pieza, mate en 1, mate en 1 difícil, mate en 2 y mate en 2 maestro).
+- **Reto del día:** un problema diario con racha de días seguidos.
 - **Aventura:** la historia de la Corona de Estrellas, 12 capítulos con dificultad creciente.
-- **Dos jugadores** en el mismo celular o tableta.
-- **Mi estilo:** 6 parejas de colores, 15 diseños de piezas (Mimitos, Selva, Cristal, Jardín, Fuego y agua, Carritos, Espacio, Caricatura, Ébano y marfil, Elegantes, Gatitos, Dulces, Robots, Clásicas), 19 tableros (4 con fotos del espacio) y 15 fondos (incluye un fondo espacial generado y 4 fotos reales del espacio).
+- **Dos jugadores** en el mismo aparato.
+- **Logros:** 32 medallas de bronce, plata y oro.
+- **Perfiles:** cada niño con su nombre, su pieza y su avance. Al empezar se pregunta la edad y el nivel para recomendar por dónde comenzar.
+- **Zona de papás:** protegida con una multiplicación. Reporte de avance y tiempo de juego por niño, ajustes (sonido, música, voz, frases del Catecismo, entrenador, vibración), recordatorio de descanso y respaldo del avance con un código.
+- **Mi estilo:** 6 parejas de colores, 15 diseños de piezas, 19 tableros y 15 fondos.
 - **Vista 2D y 3D** con tablero que se puede girar y acercar.
-- **Música clásica** con control de volumen.
-- **Frases del Catecismo y de los santos:** mientras juegan aparece una frase nueva cada 40 segundos y la voz del navegador la lee en voz alta (la música baja mientras habla). Se alternan frases del Catecismo de la Iglesia Católica, adaptadas para niños y con su número, y frases cortas de santos. Tocar la frase muestra otra; en Mi estilo se pueden ocultar o quitar la voz.
+- **Música clásica** con control de volumen y **frases del Catecismo y de los santos** leídas en voz alta (se pueden quitar).
+- **Sin anuncios, sin compras, sin cuentas y sin enviar datos.** Funciona sin internet una vez abierta. [Política de privacidad](https://pardaillan4-alt.github.io/Ajedrez-infantil/privacidad.html).
 
 El progreso se guarda en el navegador de cada aparato.
 
@@ -22,7 +28,9 @@ Para usarla como app en el celular: en Android, ábrela en Chrome y elige **Inst
 
 ## Archivos
 
-- `index.html`: toda la app (HTML, estilos y código).
+- `index.html`: toda la app (HTML, estilos, código y fuentes incluidas).
+- `privacidad.html`: política de privacidad para las tiendas.
+- `sw.js`: permite instalar la app y usarla sin internet.
 - `vendor/three.min.js`: Three.js r128 (licencia MIT) para la vista 3D.
 - `music/`: grabaciones de música clásica.
 - `icons/` y `manifest.webmanifest`: ícono para la pantalla de inicio.
@@ -54,6 +62,10 @@ Las melodías extra (Minueto en Sol, Oda a la alegría, Estrellita, Para Elisa, 
 | Andrómeda (M31) | ESA/Herschel/PACS & SPIRE Consortium, O. Krause, HSC, H. Linz |
 | Nebulosa de la Hélice | NASA/JPL-Caltech (telescopio Spitzer) |
 | Galaxia NGC 4013 | NASA y The Hubble Heritage Team (STScI/AURA) |
+
+## Tipografías
+
+Baloo 2 y Nunito, licencia SIL Open Font License 1.1, incluidas dentro de la app (sin conexión a Google Fonts).
 
 ## Créditos de modelos 3D
 

@@ -1,13 +1,13 @@
 {
   "name": "Jaque Mimito",
   "short_name": "Jaque Mimito",
-  "description": "Ajedrez tierno para niños",
+  "description": "Ajedrez para niños de 6 a 11 años: clases por edad, rompecabezas, reto diario, una aventura de 12 capítulos y partidas contra la compu. Sin anuncios.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ECE6FF",
-  "theme_color": "#ECE6FF",
+  "theme_color": "#C46BF5",
   "lang": "es",
   "icons": [
     {
@@ -23,7 +23,13 @@
       "purpose": "any"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

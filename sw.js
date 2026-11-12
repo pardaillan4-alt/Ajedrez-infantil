@@ -1,5 +1,5 @@
 // Service worker de Jaque Mimito: permite instalar la app y jugar sin internet.
-const CACHE = 'jaque-mimito-d94a86f8a0';
+const CACHE = 'jaque-mimito-0d60cc5d39';
 const CORE = ['./', 'index.html', 'vendor/three.min.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
